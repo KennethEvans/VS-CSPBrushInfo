@@ -11,47 +11,70 @@ namespace CSPBrushInfo {
         private bool err;
         private string errorMessage;
 
-        public CSPBrushParam(string name, string typeName) {
+        public CSPBrushParam(string name, string typeName, object value) {
             err = false;
             errorMessage = "No error";
             this.name = name;
-            this.typeName = typeName;
+            if (typeName != null && typeName.Length > 0) {
+                this.typeName = typeName;
+            } else {
+                // TODO This is a kluge for not getting a valid typeName here.
+                this.typeName = "BLOB";
+            }
+            this.value = value;
         }
 
-        public String info() {
+        /// <summary>
+        /// Returns an information string for this CSPBrushParam.
+        /// </summary>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        public String info(string tab) {
             StringBuilder info;
             info = new StringBuilder();
             info.Append(name);
             info.Append(" [").Append(typeName).Append("]");
             info.Append(NL);
             if (!typeName.Equals("BLOB")) {
-                info.Append(" ").Append(value);
+                info.Append(tab).Append(value);
+                info.Append(NL);
             } else {
                 byte[] iconBytes = null;
                 iconBytes = (byte[])value;
-                info.Append(" ").Append(iconBytes.GetLength(0)).Append(" bytes");
+                info.Append(tab).Append(iconBytes.GetLength(0)).AppendLine(" bytes");
+                string dump = HexDump.HexDump.Dump(iconBytes);
+                dump = HexDump.HexDump.indentLines(dump, tab);
+                info.Append(dump);
             }
-            info.Append(NL);
             return info.ToString();
         }
 
-        public string getValueAsString() {
+        /// <summary>
+        /// Returns an information string for the value for this CSPBrushParam.
+        /// </summary>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        public string getValueAsString(string tab) {
             if (!typeName.Equals("BLOB")) {
-                return value.ToString();
+                return value.ToString() + NL;
             } else {
                 byte[] iconBytes = null;
                 iconBytes = (byte[])value;
-                return iconBytes.GetLength(0) + " bytes";
+                StringBuilder info;
+                info = new StringBuilder();
+                info.AppendLine(iconBytes.GetLength(0) + " bytes");
+                string dump = HexDump.HexDump.Dump(iconBytes);
+                dump = HexDump.HexDump.indentLines(dump, tab);
+                info.Append(dump);
+                return info.ToString();
             }
         }
 
-        public bool equalsExceptType(CSPBrushParam param) {
-            if (this.name.Equals(param.name) && this.value.Equals(param.value)) {
-                return true;
-            }
-            return false;
-        }
-
+        /// <summary>
+        /// Returns if the given CSPBrushParam is equal to this one.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public bool equals(CSPBrushParam param) {
             if (!this.name.Equals(param.name) || !this.typeName.Equals(param.typeName)) {
                 return false;

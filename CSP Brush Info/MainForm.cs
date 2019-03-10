@@ -157,9 +157,8 @@ namespace CSPBrushInfo {
                         continue;
                     }
                     param = new CSPBrushParam(dataReader.GetName(i),
-                        dataReader.GetDataTypeName(i));
+                        dataReader.GetDataTypeName(i), dataReader.GetValue(i));
                     param.Value = dataReader.GetValue(i);
-                    //if (print) {
                     //    textBoxInfo.AppendText(param.info());
                     //}
                     paramsList.Add(param);
@@ -216,14 +215,14 @@ namespace CSPBrushInfo {
                 }
                 if (!found) {
                     textBoxInfo.AppendText(param1.Name + NL);
-                    textBoxInfo.AppendText("   1: " + param1.getValueAsString() + NL);
-                    textBoxInfo.AppendText("   2: Not found in 2" + NL);
+                    textBoxInfo.AppendText("  1: " + param1.getValueAsString("  "));
+                    textBoxInfo.AppendText("  2: Not found in 2" + NL);
                     continue;
                 }
-                if (found && !param1.equalsExceptType(foundParam)) {
+                if (found && !param1.equals(foundParam)) {
                     textBoxInfo.AppendText(param1.Name + NL);
-                    textBoxInfo.AppendText("   1: " + param1.getValueAsString() + NL);
-                    textBoxInfo.AppendText("   2: " + foundParam.getValueAsString() + NL);
+                    textBoxInfo.AppendText("  1: " + param1.getValueAsString("  "));
+                    textBoxInfo.AppendText("  2: " + foundParam.getValueAsString("  "));
                 }
             }
 
@@ -241,8 +240,8 @@ namespace CSPBrushInfo {
                 }
                 if (!found) {
                     textBoxInfo.AppendText(param2.Name + NL);
-                    textBoxInfo.AppendText("   1: Not found in 1" + NL);
-                    textBoxInfo.AppendText("   2: " + param2.getValueAsString() + NL);
+                    textBoxInfo.AppendText("  1: Not found in 1" + NL);
+                    textBoxInfo.AppendText("  2: " + foundParam.getValueAsString("  "));
                     break;
                 }
             }
@@ -343,7 +342,7 @@ namespace CSPBrushInfo {
             textBoxInfo.Clear();
             printHeading(FileType.Database1);
             foreach (CSPBrushParam param in params1) {
-                textBoxInfo.AppendText(param.info());
+                textBoxInfo.AppendText(param.info("  "));
             }
         }
 
@@ -352,7 +351,7 @@ namespace CSPBrushInfo {
             textBoxInfo.Clear();
             printHeading(FileType.Database2);
             foreach (CSPBrushParam param in params2) {
-                textBoxInfo.AppendText(param.info());
+                textBoxInfo.AppendText(param.info("  "));
             }
         }
 

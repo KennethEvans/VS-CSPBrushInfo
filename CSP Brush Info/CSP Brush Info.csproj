@@ -83,6 +83,7 @@
       <DependentUpon>BrushesInDatabaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CSPBrushParam.cs" />
+    <Compile Include="HexDump.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
