@@ -9,8 +9,17 @@ See https://kenevans.net/opensource/CSPBrushInfo/Help/Overview.html
 
 If you are installing from a download, just unzip the files into a directory somewhere convenient. Then run it from there. If you are installing from a build, copy these files and directories from the bin/Release directory to a convenient directory.
 
+
 * CSPBrushInfo.exe
-* Help
+* EntityFramework.dll
+* EntityFramework.SqlServer.dll
+* EntityFramework.SqlServer.xml
+* EntityFramework.xml
+* System.Data.SQLite.dll
+* System.Data.SQLite.EF6.dll
+* System.Data.SQLite.Linq.dll
+* System.Data.SQLite.dll
+* Help (directory)
 
 To uninstall, just delete these files.
 
