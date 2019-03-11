@@ -18,7 +18,7 @@ namespace CSPBrushInfo {
             if (typeName != null && typeName.Length > 0) {
                 this.typeName = typeName;
             } else {
-                // TODO This is a kluge for not getting a valid typeName here.
+                // TODO This is a kluge for not getting a valid typeName here
                 this.typeName = "BLOB";
             }
             this.value = value;
