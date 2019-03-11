@@ -35,8 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>CSPBrushInfo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -141,7 +140,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Help\CSPBrushInfo.256x256.png" />
+    <Content Include="Help\CSPBrushInfo.256x256.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="CSPBrushInfo.ico" />
     <Content Include="Help\book.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

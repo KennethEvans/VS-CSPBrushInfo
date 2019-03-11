@@ -6,23 +6,21 @@
 <title>CSP Brush Info</title>
 </head>
 <body>
-<h1 align="center"><strong><img src="./CSPBrushInfo.256x256.png" alt="Logo" width="10%" align="middle" /> CSP Brush Info Overview</strong></h1>
+<h1 align="center"><strong><img src="CSPBrushInfo.256x256.png" alt="Logo" width="256" height="256" align="middle" /> CSP Brush Info Overview</strong></h1>
 <p align="left">CSP Brush Info is designed to read a Clip Studio Paint brush configuration and display it in a readable form. It can also compare two brushes and show the differences. This can be useful for seeing the structure of the brush parameters and to easily compare the differences between two brushes. It is easier to compare brushes this way than by hunting through the brush properties dialog in Clip Studio Paint, but it is not as pretty. </p>
 <p align="left"><a href="#Acknowledgements">Acknowledgements</a> are at the end of the page. </p>
 <h3 align="left">How it Works</h3>
-<p>Krita brush parameters are stored in 200 x 200 PNG files. These files typically have the extension .kpp in Krita. The PNG image is the brush icon and the parameter data are stored in the metadata.  In Krita you can modify brushes and save them as new brushes. Your modified brushes are stored in the paintoppresets sub-folder in the Krita resources folder as .kpp files. You can find this folder in Krita 4 by going to Settings | Manage Resources... and then selecting Open Resource Folder. Brushes may also be built into Krita or come in resource bundles you obtain.</p>
-<p>There is no standard for storing metadata in the PNG specification, as there is for JPEG and other file formats. However, the program ExifTool written by Paul Harvey (see <a href="#Acknowledgements">Acknowledgements</a>) does find the metadata. There may be other metadata in the file, but the brush parameters are in a field named Preset. This field is in the form of an XML element, also named Preset. This element has attributes including the name of the brush, and also a number of sub-elements, which are XML elements named param. These attributes and elements or sub-elements contain the brush parameters. (This information does not appear to be documented and has been obtained by experimentation. It may be wrong or incomplete.)</p>
-<p>What Krita Brush Info does is run ExifTool on the .kpp files, extract the Preset element, and parse it for the various attributes and sub-elements. It displays these in a reasonably-easy-to-read form. It can get the attributes and parameters for two different files and compare them, displaying only the differences.</p>
-<p>Krita Brush Info can also read .kpp files in resource bundles. For the Krita 4 built-in brushes a bundle with the brushes, e.g. Krita_4_Default_Resources, should be found in the share/krita/bundle folder in the installation directory. For Krita 3, the Krita_3_Default_Resources bundle can be found on the web. The bundles and others you may obtain are ZIP files and with a little ingenuity can be opened with a ZIP utility and the .kpp files extracted. This is essentially what Krita Brush Info does. </p>
-<p><em>Caveats</em></p>
-<p>The Preset element often contains a string &quot;&lt;!DOCTYPE params&gt;&quot;. It is not clear what this is used for, and XML processing loses it. Thus if the attributes are reordered alphabetically, it is lost. This does not affect comparisons, but the output contains it or not  depending on if attributes are reordered or not, and it will not be included in the formatted raw XML output.</p>
-<p>The params in the Preset element have an attribute named type. Values seen include string or internal. It is also not clear what this is used for. It seems to be different in brushes obtained from the default bundle and those saved as copies of the brush. It is ignored in the comparison, and this seems to work. </p>
+<p>The following has been determined by inspection on Windows with the 1.8.7 English version of Clip Studio Paint. It may not be completely accurate and is subject to change with later versions.</p>
+<p> Clip Studio Paint configuration in general uses SQLite databases. These can be found in the CELSYS and CELSYS_EN directories. The CELSYS directory seems to be the current state and is apparently updated when Clip Studio Paint closes. The CELSYS_EN directory does not seem to change, even not always when new versions of Clip Studio Paint are installed. If Clip Studio Paint crashes or is closed in an unusual way, the state will not be saved. Brush files with the SUT extension are also SQLite databases. The interesting files for brushes are the SUT files and these database files:</p>
+<ul>
+  <li>Documents\CELSYS\CLIPStudioPaintVer1_5_0\Tool\EditImageTool.todb</li>
+  <li>Documents\CELSYS_EN\CLIPStudioPaintVer1_5_0\Tool\EditImageTool.todb</li>
+</ul>
+<p>These databases include tables for Node and Variant. The Node table has columns NodeName (the name of the brush or other tool), NodeVariantId (the variant corresponding to the current settings), and NodeInitVariantId (the variant corresponding to the default settings you get when restoring). The Node table has a column VariantId and many other columns representing the tool parameters. The brushes appear to be those where the NodeVariantId and NodeInitVariantId are non-zero, and the values of these can be used as the VariantId to find the brush parameters for the given NodeName in the Variant table. That is essentially what this program does. </p>
 <h3>The Interface</h3>
-<p>This is a screen shot of The Krita Brush Info interface.</p>
+<p>This is a screen shot of The CSP Brush Info interface.</p>
 <p align="center"><img src="CSPBrushInfo-Screenshot-1.jpg" alt="Krita Brush Info Screenshot" width="80%" /></p>
-<p>The interface has a place to enter the names of two .kpp files, either from a file on the computer or a bundle. In the case of a bundle, you have to specify both the name of the bundle and the name of the brush file in it. The Browse button for the bundle files allows you to select a file from those in the bundle. The other Browse buttons open a file dialog to pick a file on the computer.</p>
-<p>There is a check box to set if you want to compare parameters with the attributes in the order stored or sorted alphabetically. Unless this is checked, if the alphabetic order is different in two files, they will be marked as different even when the attributes have the same values. There is also a check box to include the formatted raw XML in the output, and there are check boxes to specify whether to get the brush from a bundle or a .kpp file. The example shown is getting the first brush from the Krita 4 default resources bundle and the second brush from the paintoppresets folder. </p>
-<p>There are buttons to process Brush 1 or Brush 2, to Compare the two brushes, and to quit. There is no File menu. There is, however, a context menu, obtained by right-clicking on the form.  It contains items to display an Overview, to set Preferences, and to display an About box.</p>
+<p>The interface has a place to enter the names of two databases. You can then choose the brush from the available brushes in the database, and you can choose whether to use the NodeVariantId or the NodeInitVariantId. The buttons at the bottom process either the first or second brush, showing all the parameters, Compare which shows just the parameters that are different, or Quit. There is a right-click context menu you can use to show the Overview (this page) and an About dialog. </p>
 <h3>Installation</h3>
 <p>If you are installing from a download, just unzip the files into a directory somewhere convenient. Then run it from there. If you are installing from a build, copy these files and directories from the bin/Release directory to a convenient directory.</p>
 <ul>
@@ -31,6 +29,6 @@
 </ul>
 <p>To uninstall, just delete these files.</p>
 <p><a name="Acknowledgements" id="Acknowledgements"></a><strong>Acknowledgements</strong></p>
-<p>CSP Brush Info uses the NuGet package System.Data.SQLite.. </p>
+<p>CSP Brush Info uses the NuGet package System.Data.SQLite. Clip Studio Paint is a product of <a href="https://www.celsys.co.jp/en/">Celsys</a>. </p>
 </body>
 </html>
