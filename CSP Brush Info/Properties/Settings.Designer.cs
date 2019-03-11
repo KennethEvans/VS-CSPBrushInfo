@@ -70,5 +70,29 @@ namespace CSPBrushInfo.Properties {
                 this["BrushName2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BrushVariant1 {
+            get {
+                return ((bool)(this["BrushVariant1"]));
+            }
+            set {
+                this["BrushVariant1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BrushVariant2 {
+            get {
+                return ((bool)(this["BrushVariant2"]));
+            }
+            set {
+                this["BrushVariant2"] = value;
+            }
+        }
     }
 }

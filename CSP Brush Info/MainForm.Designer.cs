@@ -39,6 +39,9 @@
             this.buttonBrush1 = new System.Windows.Forms.Button();
             this.labelFile1 = new System.Windows.Forms.Label();
             this.labelBrush1 = new System.Windows.Forms.Label();
+            this.flowLayoutPanelBrush1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioButtonVariant1 = new System.Windows.Forms.RadioButton();
+            this.radioButtonInitVariant1 = new System.Windows.Forms.RadioButton();
             this.groupBoxBrush2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanelGroupBrush2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelDatabase2 = new System.Windows.Forms.TableLayoutPanel();
@@ -48,6 +51,9 @@
             this.textBoxBrush2 = new System.Windows.Forms.TextBox();
             this.buttonBrowseBrush2 = new System.Windows.Forms.Button();
             this.labelBrush2 = new System.Windows.Forms.Label();
+            this.flowLayoutPanelBrush2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioButtonVariant2 = new System.Windows.Forms.RadioButton();
+            this.radioButtonInitVariant2 = new System.Windows.Forms.RadioButton();
             this.textBoxInfo = new System.Windows.Forms.TextBox();
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonProcess1 = new System.Windows.Forms.Button();
@@ -60,9 +66,11 @@
             this.tableLayoutPanelGroupBrush1.SuspendLayout();
             this.tableLayoutPanelDatabase1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
+            this.flowLayoutPanelBrush1.SuspendLayout();
             this.groupBoxBrush2.SuspendLayout();
             this.tableLayoutPanelGroupBrush2.SuspendLayout();
             this.tableLayoutPanelDatabase2.SuspendLayout();
+            this.flowLayoutPanelBrush2.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,7 +108,7 @@
             this.groupBoxBrush1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.groupBoxBrush1.Name = "groupBoxBrush1";
             this.groupBoxBrush1.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
-            this.groupBoxBrush1.Size = new System.Drawing.Size(1530, 131);
+            this.groupBoxBrush1.Size = new System.Drawing.Size(1530, 179);
             this.groupBoxBrush1.TabIndex = 1;
             this.groupBoxBrush1.TabStop = false;
             this.groupBoxBrush1.Text = "Brush 1";
@@ -112,7 +120,8 @@
             this.tableLayoutPanelGroupBrush1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanelGroupBrush1.ColumnCount = 1;
             this.tableLayoutPanelGroupBrush1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelGroupBrush1.Controls.Add(this.tableLayoutPanelDatabase1, 0, 1);
+            this.tableLayoutPanelGroupBrush1.Controls.Add(this.tableLayoutPanelDatabase1, 0, 0);
+            this.tableLayoutPanelGroupBrush1.Controls.Add(this.flowLayoutPanelBrush1, 0, 1);
             this.tableLayoutPanelGroupBrush1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelGroupBrush1.Location = new System.Drawing.Point(10, 33);
             this.tableLayoutPanelGroupBrush1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -120,7 +129,8 @@
             this.tableLayoutPanelGroupBrush1.RowCount = 2;
             this.tableLayoutPanelGroupBrush1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelGroupBrush1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelGroupBrush1.Size = new System.Drawing.Size(1517, 96);
+            this.tableLayoutPanelGroupBrush1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelGroupBrush1.Size = new System.Drawing.Size(1517, 144);
             this.tableLayoutPanelGroupBrush1.TabIndex = 2;
             // 
             // tableLayoutPanelDatabase1
@@ -142,7 +152,8 @@
             this.tableLayoutPanelDatabase1.Location = new System.Drawing.Point(3, 2);
             this.tableLayoutPanelDatabase1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanelDatabase1.Name = "tableLayoutPanelDatabase1";
-            this.tableLayoutPanelDatabase1.RowCount = 2;
+            this.tableLayoutPanelDatabase1.RowCount = 3;
+            this.tableLayoutPanelDatabase1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelDatabase1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelDatabase1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelDatabase1.Size = new System.Drawing.Size(1511, 92);
@@ -259,17 +270,54 @@
             this.labelBrush1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.labelBrush1, "A brush in bundle 1.");
             // 
+            // flowLayoutPanelBrush1
+            // 
+            this.flowLayoutPanelBrush1.AutoSize = true;
+            this.flowLayoutPanelBrush1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanelBrush1.Controls.Add(this.radioButtonVariant1);
+            this.flowLayoutPanelBrush1.Controls.Add(this.radioButtonInitVariant1);
+            this.flowLayoutPanelBrush1.Location = new System.Drawing.Point(3, 99);
+            this.flowLayoutPanelBrush1.Name = "flowLayoutPanelBrush1";
+            this.flowLayoutPanelBrush1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flowLayoutPanelBrush1.Size = new System.Drawing.Size(565, 42);
+            this.flowLayoutPanelBrush1.TabIndex = 6;
+            // 
+            // radioButtonVariant1
+            // 
+            this.radioButtonVariant1.AutoSize = true;
+            this.radioButtonVariant1.Checked = true;
+            this.radioButtonVariant1.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonVariant1.Name = "radioButtonVariant1";
+            this.radioButtonVariant1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.radioButtonVariant1.Size = new System.Drawing.Size(254, 36);
+            this.radioButtonVariant1.TabIndex = 1;
+            this.radioButtonVariant1.TabStop = true;
+            this.radioButtonVariant1.Text = "NodeVariantId";
+            this.radioButtonVariant1.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonInitVariant1
+            // 
+            this.radioButtonInitVariant1.AutoSize = true;
+            this.radioButtonInitVariant1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.radioButtonInitVariant1.Location = new System.Drawing.Point(263, 3);
+            this.radioButtonInitVariant1.Name = "radioButtonInitVariant1";
+            this.radioButtonInitVariant1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.radioButtonInitVariant1.Size = new System.Drawing.Size(299, 36);
+            this.radioButtonInitVariant1.TabIndex = 2;
+            this.radioButtonInitVariant1.Text = "NodeIInitVariantId";
+            this.radioButtonInitVariant1.UseVisualStyleBackColor = true;
+            // 
             // groupBoxBrush2
             // 
             this.groupBoxBrush2.AutoSize = true;
             this.groupBoxBrush2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxBrush2.Controls.Add(this.tableLayoutPanelGroupBrush2);
             this.groupBoxBrush2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxBrush2.Location = new System.Drawing.Point(5, 161);
+            this.groupBoxBrush2.Location = new System.Drawing.Point(5, 209);
             this.groupBoxBrush2.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.groupBoxBrush2.Name = "groupBoxBrush2";
             this.groupBoxBrush2.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
-            this.groupBoxBrush2.Size = new System.Drawing.Size(1530, 131);
+            this.groupBoxBrush2.Size = new System.Drawing.Size(1530, 179);
             this.groupBoxBrush2.TabIndex = 2;
             this.groupBoxBrush2.TabStop = false;
             this.groupBoxBrush2.Text = "Brush 2";
@@ -280,7 +328,8 @@
             this.tableLayoutPanelGroupBrush2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanelGroupBrush2.ColumnCount = 1;
             this.tableLayoutPanelGroupBrush2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelGroupBrush2.Controls.Add(this.tableLayoutPanelDatabase2, 0, 1);
+            this.tableLayoutPanelGroupBrush2.Controls.Add(this.tableLayoutPanelDatabase2, 0, 0);
+            this.tableLayoutPanelGroupBrush2.Controls.Add(this.flowLayoutPanelBrush2, 0, 1);
             this.tableLayoutPanelGroupBrush2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelGroupBrush2.Location = new System.Drawing.Point(10, 33);
             this.tableLayoutPanelGroupBrush2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -288,7 +337,8 @@
             this.tableLayoutPanelGroupBrush2.RowCount = 2;
             this.tableLayoutPanelGroupBrush2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelGroupBrush2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelGroupBrush2.Size = new System.Drawing.Size(1517, 96);
+            this.tableLayoutPanelGroupBrush2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelGroupBrush2.Size = new System.Drawing.Size(1517, 144);
             this.tableLayoutPanelGroupBrush2.TabIndex = 4;
             // 
             // tableLayoutPanelDatabase2
@@ -397,16 +447,53 @@
             this.labelBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.labelBrush2, "A brush in bundle 2.");
             // 
+            // flowLayoutPanelBrush2
+            // 
+            this.flowLayoutPanelBrush2.AutoSize = true;
+            this.flowLayoutPanelBrush2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanelBrush2.Controls.Add(this.radioButtonVariant2);
+            this.flowLayoutPanelBrush2.Controls.Add(this.radioButtonInitVariant2);
+            this.flowLayoutPanelBrush2.Location = new System.Drawing.Point(3, 99);
+            this.flowLayoutPanelBrush2.Name = "flowLayoutPanelBrush2";
+            this.flowLayoutPanelBrush2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flowLayoutPanelBrush2.Size = new System.Drawing.Size(565, 42);
+            this.flowLayoutPanelBrush2.TabIndex = 7;
+            // 
+            // radioButtonVariant2
+            // 
+            this.radioButtonVariant2.AutoSize = true;
+            this.radioButtonVariant2.Checked = true;
+            this.radioButtonVariant2.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonVariant2.Name = "radioButtonVariant2";
+            this.radioButtonVariant2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.radioButtonVariant2.Size = new System.Drawing.Size(254, 36);
+            this.radioButtonVariant2.TabIndex = 1;
+            this.radioButtonVariant2.TabStop = true;
+            this.radioButtonVariant2.Text = "NodeVariantId";
+            this.radioButtonVariant2.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonInitVariant2
+            // 
+            this.radioButtonInitVariant2.AutoSize = true;
+            this.radioButtonInitVariant2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.radioButtonInitVariant2.Location = new System.Drawing.Point(263, 3);
+            this.radioButtonInitVariant2.Name = "radioButtonInitVariant2";
+            this.radioButtonInitVariant2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.radioButtonInitVariant2.Size = new System.Drawing.Size(299, 36);
+            this.radioButtonInitVariant2.TabIndex = 2;
+            this.radioButtonInitVariant2.Text = "NodeIInitVariantId";
+            this.radioButtonInitVariant2.UseVisualStyleBackColor = true;
+            // 
             // textBoxInfo
             // 
             this.textBoxInfo.ContextMenuStrip = this.contextMenuStrip;
             this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfo.Location = new System.Drawing.Point(3, 304);
+            this.textBoxInfo.Location = new System.Drawing.Point(3, 400);
             this.textBoxInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxInfo.Multiline = true;
             this.textBoxInfo.Name = "textBoxInfo";
             this.textBoxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxInfo.Size = new System.Drawing.Size(1534, 755);
+            this.textBoxInfo.Size = new System.Drawing.Size(1534, 659);
             this.textBoxInfo.TabIndex = 4;
             // 
             // flowLayoutPanelButtons
@@ -507,12 +594,16 @@
             this.tableLayoutPanelDatabase1.ResumeLayout(false);
             this.tableLayoutPanelDatabase1.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
+            this.flowLayoutPanelBrush1.ResumeLayout(false);
+            this.flowLayoutPanelBrush1.PerformLayout();
             this.groupBoxBrush2.ResumeLayout(false);
             this.groupBoxBrush2.PerformLayout();
             this.tableLayoutPanelGroupBrush2.ResumeLayout(false);
             this.tableLayoutPanelGroupBrush2.PerformLayout();
             this.tableLayoutPanelDatabase2.ResumeLayout(false);
             this.tableLayoutPanelDatabase2.PerformLayout();
+            this.flowLayoutPanelBrush2.ResumeLayout(false);
+            this.flowLayoutPanelBrush2.PerformLayout();
             this.flowLayoutPanelButtons.ResumeLayout(false);
             this.flowLayoutPanelButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -552,6 +643,12 @@
         private System.Windows.Forms.TextBox textBoxBrush1;
         private System.Windows.Forms.Button buttonBrush1;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.RadioButton radioButtonVariant1;
+        private System.Windows.Forms.RadioButton radioButtonInitVariant1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelBrush1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelBrush2;
+        private System.Windows.Forms.RadioButton radioButtonVariant2;
+        private System.Windows.Forms.RadioButton radioButtonInitVariant2;
     }
 }
 

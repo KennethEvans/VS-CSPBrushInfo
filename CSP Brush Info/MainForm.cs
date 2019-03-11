@@ -33,6 +33,10 @@ namespace CSPBrushInfo {
             textBoxDatabase2.Text = Properties.Settings.Default.DatabaseName2;
             textBoxBrush1.Text = Properties.Settings.Default.BrushName1;
             textBoxBrush2.Text = Properties.Settings.Default.BrushName2;
+            radioButtonVariant1.Checked = Properties.Settings.Default.BrushVariant1;
+            radioButtonVariant2.Checked = Properties.Settings.Default.BrushVariant2;
+            radioButtonInitVariant1.Checked = !radioButtonVariant1.Checked;
+            radioButtonInitVariant2.Checked = !radioButtonVariant2.Checked;
         }
 
         /// <summary>
@@ -43,6 +47,7 @@ namespace CSPBrushInfo {
         private void processDatabase(FileType fileType, bool print) {
             int nDatabase = 1;
             TextBox textBoxDatabase = null;
+            RadioButton radioButtonVariant = null;
             List<CSPBrushParam> paramsList = null;
             CSPBrushParam param = null;
             string info = null;
@@ -50,13 +55,16 @@ namespace CSPBrushInfo {
                 case FileType.Database1:
                     nDatabase = 1;
                     textBoxDatabase = textBoxDatabase1;
+                    radioButtonVariant = radioButtonVariant1;
                     break;
                 case FileType.Database2:
                     nDatabase = 2;
                     textBoxDatabase = textBoxDatabase2;
+                    radioButtonVariant = radioButtonVariant2;
                     break;
                 default:
-                    Utils.Utils.errMsg("Invalid fileType (" + fileType + ") for processDatabase");
+                    Utils.Utils.errMsg("Invalid fileType ("
+                        + fileType + ") for processDatabase");
                     return;
             }
             textBoxInfo.Clear();
@@ -90,9 +98,13 @@ namespace CSPBrushInfo {
             DateTime modTime = File.GetLastWriteTime(name);
             info += name + NL;
             info += "Modified: " + modTime + NL;
+            info += "Using: "
+                + (radioButtonVariant.Checked ?
+                "NodeVariantID" : "NodeInitVariantID") + NL;
             // Find the node
             try {
-                conn = new SQLiteConnection("Data Source=" + name + ";Version=3;Read Only=True;");
+                conn = new SQLiteConnection("Data Source=" + name
+                    + ";Version=3;Read Only=True;");
                 conn.Open();
                 SQLiteDataReader dataReader;
                 SQLiteCommand command;
@@ -102,7 +114,8 @@ namespace CSPBrushInfo {
                     + brushName + "'";
                 dataReader = command.ExecuteReader();
                 if (!dataReader.HasRows) {
-                    Utils.Utils.errMsg("No matching rows looking for " + brushName);
+                    Utils.Utils.errMsg("No matching rows looking for "
+                        + brushName);
                     registerOutput(fileType, info, paramsList);
                     return;
                 }
@@ -111,12 +124,14 @@ namespace CSPBrushInfo {
                 nodeVariantId = dataReader.GetInt32(1);
                 nodeInitVariantId = dataReader.GetInt32(2);
                 if (!nodeName.Equals(brushName)) {
-                    Utils.Utils.errMsg("Looking for " + brushName + ", found " + nodeName);
+                    Utils.Utils.errMsg("Looking for " + brushName + ", found "
+                        + nodeName);
                     registerOutput(fileType, info, paramsList);
                     return;
                 }
                 if (nodeVariantId == 0) {
-                    Utils.Utils.errMsg(brushName + " is not a brush (No Nodevariant Id)");
+                    Utils.Utils.errMsg(brushName
+                        + " is not a brush (No Nodevariant Id)");
                     registerOutput(fileType, info, paramsList);
                     return;
                 }
@@ -134,16 +149,21 @@ namespace CSPBrushInfo {
             // Find the variant
             conn = null;
             try {
-                conn = new SQLiteConnection("Data Source=" + name + ";Version=3;Read Only=True;");
+                conn = new SQLiteConnection("Data Source=" + name
+                    + ";Version=3;Read Only=True;");
                 conn.Open();
                 SQLiteDataReader dataReader;
                 SQLiteCommand command;
                 command = conn.CreateCommand();
-                command.CommandText = "SELECT * FROM Variant WHERE VariantID=" + nodeVariantId;
+                int variantId = (radioButtonVariant.Checked) ?
+                    nodeVariantId : nodeInitVariantId;
+                command.CommandText = "SELECT * FROM Variant WHERE VariantID="
+                    + variantId;
                 dataReader = command.ExecuteReader();
                 if (!dataReader.HasRows) {
                     registerOutput(fileType, info, paramsList);
-                    Utils.Utils.errMsg("No matching rows forLooking for VariantID = " + nodeVariantId);
+                    Utils.Utils.errMsg("No matching rows looking for VariantID = "
+                        + variantId);
                     return;
                 }
                 dataReader.Read();
@@ -334,6 +354,8 @@ namespace CSPBrushInfo {
             Properties.Settings.Default.DatabaseName2 = textBoxDatabase2.Text;
             Properties.Settings.Default.BrushName1 = textBoxBrush1.Text;
             Properties.Settings.Default.BrushName2 = textBoxBrush2.Text;
+            Properties.Settings.Default.BrushVariant1 = radioButtonVariant1.Checked;
+            Properties.Settings.Default.BrushVariant2 = radioButtonVariant2.Checked;
             Properties.Settings.Default.Save();
         }
 

@@ -19,7 +19,11 @@ namespace CSPBrushInfo {
                 this.typeName = typeName;
             } else {
                 // TODO This is a kluge for not getting a valid typeName here
-                this.typeName = "BLOB";
+                if (value.GetType() == typeof(byte[])) {
+                    this.typeName = "(BLOB)";
+                } else {
+                    this.typeName = "(" + value.GetType().ToString() + ")";
+                }
             }
             this.value = value;
         }
@@ -35,7 +39,7 @@ namespace CSPBrushInfo {
             info.Append(name);
             info.Append(" [").Append(typeName).Append("]");
             info.Append(NL);
-            if (!typeName.Equals("BLOB")) {
+            if (!typeName.Contains("BLOB")) {
                 info.Append(tab).Append(value);
                 info.Append(NL);
             } else {
@@ -55,7 +59,7 @@ namespace CSPBrushInfo {
         /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
         /// <returns></returns>
         public string getValueAsString(string tab) {
-            if (!typeName.Equals("BLOB")) {
+            if (!typeName.Contains("BLOB")) {
                 return value.ToString() + NL;
             } else {
                 byte[] iconBytes = null;
@@ -79,24 +83,23 @@ namespace CSPBrushInfo {
             if (!this.name.Equals(param.name) || !this.typeName.Equals(param.typeName)) {
                 return false;
             }
-            if (!typeName.Equals("BLOB")) {
-                if (value.Equals(param.value)) {
+            if (!this.typeName.Contains("BLOB")) {
+                if (this.value.Equals(param.value)) {
                     return true;
                 } else {
                     return false;
                 }
-            } else {
-                byte[] iconBytes = (byte[])value; ;
-                byte[] iconBytesParam = (byte[])param.value;
-                int len = iconBytes.GetLength(0);
-                int lenParam = iconBytesParam.GetLength(0);
-                if (len != lenParam) {
+            }
+            byte[] iconBytes = (byte[])this.value; ;
+            byte[] iconBytesParam = (byte[])param.value;
+            int len = iconBytes.GetLength(0);
+            int lenParam = iconBytesParam.GetLength(0);
+            if (len != lenParam) {
+                return false;
+            }
+            for (int i = 0; i < len; i++) {
+                if (iconBytes[i] != iconBytesParam[i]) {
                     return false;
-                }
-                for (int i = 0; i < len; i++) {
-                    if (iconBytes[i] != iconBytesParam[i]) {
-                        return false;
-                    }
                 }
             }
             return true;
