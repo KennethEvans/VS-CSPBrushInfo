@@ -20,6 +20,8 @@ If you are installing from a download, just unzip the files into a directory som
 * System.Data.SQLite.Linq.dll
 * System.Data.SQLite.dll
 * Help (directory)
+* x64 (directory)
+* x86 (directory)
 
 To uninstall, just delete these files.
 
