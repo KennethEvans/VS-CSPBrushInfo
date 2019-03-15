@@ -97,10 +97,11 @@ namespace CSPBrushInfo {
             SQLiteConnection conn = null;
             DateTime modTime = File.GetLastWriteTime(name);
             info += name + NL;
-            info += "Modified: " + modTime + NL;
+            info += "Brush: " + brushName + NL;
             info += "Using: "
-                + (radioButtonVariant.Checked ?
-                "NodeVariantID" : "NodeInitVariantID") + NL;
+               + (radioButtonVariant.Checked ?
+               "NodeVariantID" : "NodeInitVariantID") + NL;
+            info += "Modified: " + modTime + NL;
             // Find the node
             try {
                 conn = new SQLiteConnection("Data Source=" + name

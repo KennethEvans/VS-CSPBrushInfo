@@ -13,12 +13,9 @@ If you are installing from a download, just unzip the files into a directory som
 * CSPBrushInfo.exe
 * EntityFramework.dll
 * EntityFramework.SqlServer.dll
-* EntityFramework.SqlServer.xml
-* EntityFramework.xml
 * System.Data.SQLite.dll
 * System.Data.SQLite.EF6.dll
 * System.Data.SQLite.Linq.dll
-* System.Data.SQLite.dll
 * Help (directory)
 * x64 (directory)
 * x86 (directory)
