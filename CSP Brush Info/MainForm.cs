@@ -47,6 +47,7 @@ namespace CSPBrushInfo {
         private void processDatabase(FileType fileType, bool print) {
             int nDatabase = 1;
             TextBox textBoxDatabase = null;
+            TextBox textBoxBrush = null;
             RadioButton radioButtonVariant = null;
             List<CSPBrushParam> paramsList = null;
             CSPBrushParam param = null;
@@ -55,11 +56,13 @@ namespace CSPBrushInfo {
                 case FileType.Database1:
                     nDatabase = 1;
                     textBoxDatabase = textBoxDatabase1;
+                    textBoxBrush = textBoxBrush1;
                     radioButtonVariant = radioButtonVariant1;
                     break;
                 case FileType.Database2:
                     nDatabase = 2;
                     textBoxDatabase = textBoxDatabase2;
+                    textBoxBrush = textBoxBrush2;
                     radioButtonVariant = radioButtonVariant2;
                     break;
                 default:
@@ -87,7 +90,7 @@ namespace CSPBrushInfo {
                 return;
             }
             // Get the selected brush name
-            string brushName = textBoxBrush1.Text;
+            string brushName = textBoxBrush.Text;
             if (brushName == null | brushName.Length == 0) {
                 registerOutput(fileType, info, paramsList);
                 Utils.Utils.errMsg(brushName + " not specified");
