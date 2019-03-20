@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 
 namespace CSPBrushInfo {
@@ -49,8 +50,107 @@ namespace CSPBrushInfo {
                 string dump = HexDump.HexDump.Dump(iconBytes);
                 dump = HexDump.HexDump.indentLines(dump, tab);
                 info.Append(dump);
+                string interpret = interpretBlob(iconBytes, tab);
+                info.Append(interpret);
             }
             return info.ToString();
+        }
+
+        /// <summary>
+        /// Interprets the blob as an Effector.  Returns a blank string if the
+        /// name does not contain Effector.  Converts to BigEndian.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        string interpretBlob(byte[] bytes, string tab) {
+            string info = "";
+            // Only do Effectors
+            if (!name.ToLower().Contains("effector")) return info;
+            info = tab + "Interpreted:" + NL;
+            int nBytes = bytes.Length;
+            int nBytesRead = 0;
+            int nControlPoints;
+            int iVal;
+            byte[] charData;
+            double pointX, pointY;
+            try {
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
+                    // Get first 11 integers
+                    for (int i = 0; i < 11; i++) {
+                        if (i == nBytes) return info;
+                        charData = reader.ReadBytes(4);
+                        nBytesRead += 4;
+                        Array.Reverse(charData);
+                        iVal = BitConverter.ToInt32(charData, 0);
+                        if (i % 4 == 0) {
+                            if (i != 0) info += NL;
+                            info += tab;
+                        }
+                        info += String.Format("{0,6}", iVal);
+                    }
+                    if (!info.EndsWith(NL)) info += NL;
+                    if (nBytesRead == nBytes) return info;
+                    // Get next 3 bytes
+                    nControlPoints = 0;
+                    for (int i = 0; i < 3; i++) {
+                        charData = reader.ReadBytes(4);
+                        nBytesRead += 4;
+                        Array.Reverse(charData);
+                        iVal = BitConverter.ToInt32(charData, 0);
+                        if (i == 1) nControlPoints = iVal;
+                        if (i == 0) info += tab;
+                        info += String.Format("{0,6}", iVal);
+                    }
+                    info += NL;
+                    // Get control Points
+                    for (int i = 0; i < nControlPoints; i++) {
+                        charData = reader.ReadBytes(8);
+                        nBytesRead += 8;
+                        Array.Reverse(charData);
+                        pointX = BitConverter.ToDouble(charData, 0);
+                        charData = reader.ReadBytes(8);
+                        nBytesRead += 8;
+                        Array.Reverse(charData);
+                        pointY = BitConverter.ToDouble(charData, 0);
+                        info += tab + String.Format(
+                            "Control Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
+                            i + 1, pointX, pointY) + NL;
+                    }
+                    if (nBytesRead == nBytes) return info;
+                    // Get next 3 bytes
+                    nControlPoints = 0;
+                    for (int i = 0; i < 3; i++) {
+                        charData = reader.ReadBytes(4);
+                        nBytesRead += 4;
+                        Array.Reverse(charData);
+                        iVal = BitConverter.ToInt32(charData, 0);
+                        if (i == 1) nControlPoints = iVal;
+                        if (i == 0) info += tab;
+                        info += String.Format("{0,6}", iVal);
+                    }
+                    info += NL;
+                    // Get control Points
+                    for (int i = 0; i < nControlPoints; i++) {
+                        charData = reader.ReadBytes(8);
+                        nBytesRead += 8;
+                        Array.Reverse(charData);
+                        pointX = BitConverter.ToDouble(charData, 0);
+                        charData = reader.ReadBytes(8);
+                        nBytesRead += 8;
+                        Array.Reverse(charData);
+                        pointY = BitConverter.ToDouble(charData, 0);
+                        info += tab + String.Format(
+                            "Control Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
+                            i + 1, pointX, pointY) + NL;
+                    }
+                    return info;
+                }
+            } catch (Exception ex) {
+                info += "Error reading data for " + name + NL;
+                info += ex + NL;
+                return info;
+            }
         }
 
         /// <summary>
@@ -70,6 +170,8 @@ namespace CSPBrushInfo {
                 string dump = HexDump.HexDump.Dump(iconBytes);
                 dump = HexDump.HexDump.indentLines(dump, tab);
                 info.Append(dump);
+                string interpret = interpretBlob(iconBytes, tab);
+                info.Append(interpret);
                 return info.ToString();
             }
         }
