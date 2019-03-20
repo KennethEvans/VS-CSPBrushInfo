@@ -74,76 +74,139 @@ namespace CSPBrushInfo {
             int iVal;
             byte[] charData;
             double pointX, pointY;
+            bool pressureUsed = false, tiltUsed = false, velocityUsed = false, randomUsed = false;
             try {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
                     // Get first 11 integers
-                    for (int i = 0; i < 11; i++) {
-                        if (i == nBytes) return info;
-                        charData = reader.ReadBytes(4);
-                        nBytesRead += 4;
-                        Array.Reverse(charData);
-                        iVal = BitConverter.ToInt32(charData, 0);
-                        if (i % 4 == 0) {
-                            if (i != 0) info += NL;
-                            info += tab;
-                        }
-                        info += String.Format("{0,6}", iVal);
-                    }
-                    if (!info.EndsWith(NL)) info += NL;
                     if (nBytesRead == nBytes) return info;
-                    // Get next 3 bytes
+                    info += tab + "  ";
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined1={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined2={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("usedFlag={0} ", iVal);
+                    if ((iVal & 0x10) != 0) pressureUsed = true;
+                    if ((iVal & 0x20) != 0) tiltUsed = true;
+                    if ((iVal & 0x40) != 0) velocityUsed = true;
+                    if ((iVal & 0x80) != 0) randomUsed = true;
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("pmin={0} ", iVal);
+                    info += NL + tab + "    (pressureUsed=" + pressureUsed
+                        + " tiltUsed=" + tiltUsed
+                        + " velocityUsed=" + velocityUsed
+                        + " randomUsed=" + randomUsed
+                        + ")";
+
+                    if (nBytesRead == nBytes) return info;
+                    info += NL + tab + "  ";
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("tmin={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("vmax={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("rmax={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined8={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    info += NL + tab + "  ";
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined9={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined10={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("tmax={0} ", iVal);
+
+                    // Read 3 control point integers
                     nControlPoints = 0;
-                    for (int i = 0; i < 3; i++) {
-                        charData = reader.ReadBytes(4);
-                        nBytesRead += 4;
-                        Array.Reverse(charData);
-                        iVal = BitConverter.ToInt32(charData, 0);
-                        if (i == 1) nControlPoints = iVal;
-                        if (i == 0) info += tab;
-                        info += String.Format("{0,6}", iVal);
-                    }
+                    if (nBytesRead == nBytes) return info;
+                    info += NL + tab + "Control Points 1: ";
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined1={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nControlPoints = iVal;
+                    nBytesRead += 4;
+                    info += String.Format("nPoints={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined3={0} ", iVal);
                     info += NL;
+
                     // Get control Points
                     for (int i = 0; i < nControlPoints; i++) {
-                        charData = reader.ReadBytes(8);
+                        pointX = readDouble(reader);
                         nBytesRead += 8;
-                        Array.Reverse(charData);
-                        pointX = BitConverter.ToDouble(charData, 0);
-                        charData = reader.ReadBytes(8);
+                        pointY = readDouble(reader);
                         nBytesRead += 8;
-                        Array.Reverse(charData);
-                        pointY = BitConverter.ToDouble(charData, 0);
-                        info += tab + String.Format(
-                            "Control Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
+                        info += tab + "  " + String.Format(
+                            "Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
                             i + 1, pointX, pointY) + NL;
                     }
                     if (nBytesRead == nBytes) return info;
-                    // Get next 3 bytes
+                    // Read 3 control point integers
                     nControlPoints = 0;
-                    for (int i = 0; i < 3; i++) {
-                        charData = reader.ReadBytes(4);
-                        nBytesRead += 4;
-                        Array.Reverse(charData);
-                        iVal = BitConverter.ToInt32(charData, 0);
-                        if (i == 1) nControlPoints = iVal;
-                        if (i == 0) info += tab;
-                        info += String.Format("{0,6}", iVal);
-                    }
+                    if (nBytesRead == nBytes) return info;
+                    info += tab + "Control Points 2: ";
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined1={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nControlPoints = iVal;
+                    nBytesRead += 4;
+                    info += String.Format("nPoints={0} ", iVal);
+
+                    if (nBytesRead == nBytes) return info;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("undetermined3={0} ", iVal);
                     info += NL;
+
                     // Get control Points
                     for (int i = 0; i < nControlPoints; i++) {
-                        charData = reader.ReadBytes(8);
+                        pointX = readDouble(reader);
                         nBytesRead += 8;
-                        Array.Reverse(charData);
-                        pointX = BitConverter.ToDouble(charData, 0);
-                        charData = reader.ReadBytes(8);
+                        pointY = readDouble(reader);
                         nBytesRead += 8;
-                        Array.Reverse(charData);
-                        pointY = BitConverter.ToDouble(charData, 0);
-                        info += tab + String.Format(
-                            "Control Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
+                        info += tab + "  " + String.Format(
+                            "Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
                             i + 1, pointX, pointY) + NL;
                     }
+                    if (nBytesRead == nBytes) return info;
                     return info;
                 }
             } catch (Exception ex) {
@@ -151,6 +214,18 @@ namespace CSPBrushInfo {
                 info += ex + NL;
                 return info;
             }
+        }
+
+        int readInteger(BinaryReader reader) {
+            byte[] charData = reader.ReadBytes(4);
+            Array.Reverse(charData);
+            return BitConverter.ToInt32(charData, 0);
+        }
+
+        double readDouble(BinaryReader reader) {
+            byte[] charData = reader.ReadBytes(8);
+            Array.Reverse(charData);
+            return BitConverter.ToDouble(charData, 0);
         }
 
         /// <summary>
