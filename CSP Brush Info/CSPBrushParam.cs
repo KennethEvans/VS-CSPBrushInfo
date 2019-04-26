@@ -112,17 +112,17 @@ namespace CSPBrushInfo {
                     info += NL + tab + "  ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("tmin={0} ", iVal);
+                    info += String.Format("tMin={0} ", iVal);
 
                     if (nBytesRead == nBytes) return info;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("vmax={0} ", iVal);
+                    info += String.Format("vMax={0} ", iVal);
 
                     if (nBytesRead == nBytes) return info;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("rmax={0} ", iVal);
+                    info += String.Format("rMax={0} ", iVal);
 
                     if (nBytesRead == nBytes) return info;
                     iVal = readInteger(reader);
@@ -143,7 +143,7 @@ namespace CSPBrushInfo {
                     if (nBytesRead == nBytes) return info;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("tmax={0} ", iVal);
+                    info += String.Format("tMax={0} ", iVal);
 
                     // Read 3 control point integers
                     nControlPoints = 0;
