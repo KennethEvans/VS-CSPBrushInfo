@@ -147,7 +147,10 @@ namespace CSPBrushInfo {
 
                     // Read 3 control point integers
                     nControlPoints = 0;
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) {
+                        info += NL;
+                        return info;
+                    }
                     info += NL + tab + "Control Points 1: ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
