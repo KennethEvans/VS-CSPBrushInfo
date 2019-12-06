@@ -98,6 +98,7 @@ namespace CSPBrushInfo {
             }
 
             SQLiteConnection conn = null;
+            SQLiteDataReader dataReader;
             DateTime modTime = File.GetLastWriteTime(name);
             info += name + NL;
             info += "Brush: " + brushName + NL;
@@ -107,95 +108,87 @@ namespace CSPBrushInfo {
             info += "Modified: " + modTime + NL;
             // Find the node
             try {
-                conn = new SQLiteConnection("Data Source=" + name
-                    + ";Version=3;Read Only=True;");
-                conn.Open();
-                SQLiteDataReader dataReader;
-                SQLiteCommand command;
-                command = conn.CreateCommand();
-                command.CommandText = "SELECT NodeName, NodeVariantId, " +
-                    "NodeInitVariantId FROM Node WHERE NodeName='"
-                    + brushName + "'";
-                dataReader = command.ExecuteReader();
-                if (!dataReader.HasRows) {
-                    Utils.Utils.errMsg("No matching rows looking for "
-                        + brushName);
-                    registerOutput(fileType, info, paramsList);
-                    return;
-                }
-                dataReader.Read();
-                nodeName = dataReader.GetString(0);
-                nodeVariantId = dataReader.GetInt32(1);
-                nodeInitVariantId = dataReader.GetInt32(2);
-                if (!nodeName.Equals(brushName)) {
-                    Utils.Utils.errMsg("Looking for " + brushName + ", found "
-                        + nodeName);
-                    registerOutput(fileType, info, paramsList);
-                    return;
-                }
-                if (nodeVariantId == 0) {
-                    Utils.Utils.errMsg(brushName
-                        + " is not a brush (No Nodevariant Id)");
-                    registerOutput(fileType, info, paramsList);
-                    return;
+                using (conn = new SQLiteConnection("Data Source=" + name
+                    + ";Version=3;Read Only=True;")) {
+                    conn.Open();
+                    SQLiteCommand command;
+                    command = conn.CreateCommand();
+                    command.CommandText = "SELECT NodeName, NodeVariantId, " +
+                        "NodeInitVariantId FROM Node WHERE NodeName='"
+                        + brushName + "'";
+                    using (dataReader = command.ExecuteReader()) {
+                        if (!dataReader.HasRows) {
+                            Utils.Utils.errMsg("No matching rows looking for "
+                                + brushName);
+                            registerOutput(fileType, info, paramsList);
+                            return;
+                        }
+                        dataReader.Read();
+                        nodeName = dataReader.GetString(0);
+                        nodeVariantId = dataReader.GetInt32(1);
+                        nodeInitVariantId = dataReader.GetInt32(2);
+                        if (!nodeName.Equals(brushName)) {
+                            Utils.Utils.errMsg("Looking for " + brushName + ", found "
+                                + nodeName);
+                            registerOutput(fileType, info, paramsList);
+                            return;
+                        }
+                        if (nodeVariantId == 0) {
+                            Utils.Utils.errMsg(brushName
+                                + " is not a brush (No Nodevariant Id)");
+                            registerOutput(fileType, info, paramsList);
+                            return;
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 Utils.Utils.excMsg("Failed to find " + brushName, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
-            } finally {
-                if (conn != null) {
-                    conn.Close();
-                    conn = null;
-                }
             }
 
             // Find the variant
             conn = null;
             try {
-                conn = new SQLiteConnection("Data Source=" + name
-                    + ";Version=3;Read Only=True;");
-                conn.Open();
-                SQLiteDataReader dataReader;
-                SQLiteCommand command;
-                command = conn.CreateCommand();
-                int variantId = (radioButtonVariant.Checked) ?
-                    nodeVariantId : nodeInitVariantId;
-                command.CommandText = "SELECT * FROM Variant WHERE VariantID="
-                    + variantId;
-                dataReader = command.ExecuteReader();
-                if (!dataReader.HasRows) {
-                    registerOutput(fileType, info, paramsList);
-                    Utils.Utils.errMsg("No matching rows looking for VariantID = "
-                        + variantId);
-                    return;
-                }
-                dataReader.Read();
-                nCols = dataReader.FieldCount;
-                if (print) {
-                    textBoxInfo.AppendText(info + NL);
-                }
-                for (int i = 0; i < nCols; i++) {
-                    if (dataReader.IsDBNull(i)) {
-                        nNull++;
-                        continue;
+                using (conn = new SQLiteConnection("Data Source=" + name
+                    + ";Version=3;Read Only=True;")) {
+                    conn.Open();
+                    SQLiteCommand command;
+                    command = conn.CreateCommand();
+                    int variantId = (radioButtonVariant.Checked) ?
+                        nodeVariantId : nodeInitVariantId;
+                    command.CommandText = "SELECT * FROM Variant WHERE VariantID="
+                        + variantId;
+                    using (dataReader = command.ExecuteReader()) {
+                        if (!dataReader.HasRows) {
+                            Utils.Utils.errMsg("No matching rows looking for VariantID = "
+                                + variantId);
+                            registerOutput(fileType, info, paramsList);
+                            return;
+                        }
+                        dataReader.Read();
+                        nCols = dataReader.FieldCount;
+                        if (print) {
+                            textBoxInfo.AppendText(info + NL);
+                        }
+                        for (int i = 0; i < nCols; i++) {
+                            if (dataReader.IsDBNull(i)) {
+                                nNull++;
+                                continue;
+                            }
+                            param = new CSPBrushParam(dataReader.GetName(i),
+                                dataReader.GetDataTypeName(i), dataReader.GetValue(i));
+                            param.Value = dataReader.GetValue(i);
+                            //    textBoxInfo.AppendText(param.info());
+                            //}
+                            paramsList.Add(param);
+                        }
                     }
-                    param = new CSPBrushParam(dataReader.GetName(i),
-                        dataReader.GetDataTypeName(i), dataReader.GetValue(i));
-                    param.Value = dataReader.GetValue(i);
-                    //    textBoxInfo.AppendText(param.info());
-                    //}
-                    paramsList.Add(param);
                 }
             } catch (Exception ex) {
                 Utils.Utils.excMsg("Failed to find VariantID=" + nodeVariantId, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
-            } finally {
-                if (conn != null) {
-                    conn.Close();
-                    conn = null;
-                }
             }
             info += "Columns: " + nCols + " Null: " + nNull + " Non-Null: "
                 + (nCols - nNull) + NL;
