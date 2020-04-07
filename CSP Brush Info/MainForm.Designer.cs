@@ -185,7 +185,7 @@
             this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
             this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
             this.toolStripMenuItemOverview.Text = "Overview";
-            this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
+            this.toolStripMenuItemOverview.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // toolStripSeparator1
             // 

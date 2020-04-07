@@ -382,7 +382,7 @@ namespace CSPBrushInfo {
             Close();
         }
 
-        private void onOverviewClick(object sender, EventArgs e) {
+        private void OnOverviewClick(object sender, EventArgs e) {
             // Create, show, or set visible the overview dialog as appropriate
             if (overviewDlg == null) {
                 MainForm app = (MainForm)FindForm().FindForm();
