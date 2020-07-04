@@ -72,7 +72,6 @@ namespace CSPBrushInfo {
             int nBytesRead = 0;
             int nControlPoints;
             int iVal;
-            byte[] charData;
             double pointX, pointY;
             bool pressureUsed = false, tiltUsed = false, velocityUsed = false, randomUsed = false;
             try {
@@ -260,15 +259,14 @@ namespace CSPBrushInfo {
         /// <param name="param"></param>
         /// <returns></returns>
         public bool equals(CSPBrushParam param) {
-            if (!this.name.Equals(param.name) || !this.typeName.Equals(param.typeName)) {
+            if (!this.name.Equals(param.name)) {
                 return false;
             }
             if (!this.typeName.Contains("BLOB")) {
-                if (this.value.Equals(param.value)) {
-                    return true;
-                } else {
+                if (!this.typeName.Equals(param.typeName)) {
                     return false;
                 }
+                return this.value.Equals(param.value);
             }
             byte[] iconBytes = (byte[])this.value; ;
             byte[] iconBytesParam = (byte[])param.value;

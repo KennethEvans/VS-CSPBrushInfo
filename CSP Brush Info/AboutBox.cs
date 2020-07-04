@@ -7,7 +7,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CSPBrushInfo {
+namespace About
+    {
     partial class AboutBox : Form {
         public AboutBox() {
             InitializeComponent();

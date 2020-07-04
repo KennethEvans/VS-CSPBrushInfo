@@ -1,4 +1,4 @@
-﻿namespace CSPBrushInfo {
+﻿namespace About {
     partial class AboutBox {
         /// <summary>
         /// Required designer variable.
@@ -64,7 +64,7 @@
             // logoPictureBox
             // 
             this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
+            this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("CSPBrushInfo.256x256")));
             this.logoPictureBox.Location = new System.Drawing.Point(8, 7);
             this.logoPictureBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.logoPictureBox.Name = "logoPictureBox";

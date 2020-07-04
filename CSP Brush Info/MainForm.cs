@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using About;
 
 namespace CSPBrushInfo {
 
