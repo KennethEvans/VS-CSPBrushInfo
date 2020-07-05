@@ -8,6 +8,7 @@ namespace CSPBrushInfo {
     public partial class BrushesInDatabaseDialog : Form {
         private string selected;
         private string database;
+        private List<string> items;
 
         public string SelectedBrush { get => selected; set => selected = value; }
         public string Database { get => database; set => database = value; }
@@ -35,6 +36,23 @@ namespace CSPBrushInfo {
             }
         }
 
+        private List<string> getFilteredItems() {
+            if (items == null) {
+                return null;
+            }
+            string filter = textBoxFilter.Text;
+            if (String.IsNullOrEmpty(filter)) {
+                return items;
+            }
+            List<String> filteredItems = new List<String>();
+            foreach (string item in items) {
+                if (item.Contains(filter)) {
+                    filteredItems.Add(item);
+                }
+            }
+            return filteredItems;
+        }
+
         private void find() {
             listBoxBrushes.DataSource = null;
             string name = textBoxDatabase.Text;
@@ -49,7 +67,7 @@ namespace CSPBrushInfo {
             // Get the brushes from the database
             SQLiteConnection conn = null;
             try {
-                List<string> items = new List<string>();
+                items = new List<string>();
                 conn = new SQLiteConnection("Data Source=" + name + ";Version=3;Read Only=True;");
                 conn.Open();
                 SQLiteDataReader dataReader;
@@ -73,7 +91,12 @@ namespace CSPBrushInfo {
                     }
                 }
                 items.Sort();
-                listBoxBrushes.DataSource = items;
+                List<String> filteredItems = getFilteredItems();
+                if (filteredItems != null && filteredItems != items && filteredItems.Count > 0) {
+                    listBoxBrushes.DataSource = filteredItems;
+                } else {
+                    listBoxBrushes.DataSource = items;
+                }
             } catch (Exception ex) {
                 Utils.Utils.excMsg("Failed to get brushes", ex);
                 return;
@@ -101,6 +124,16 @@ namespace CSPBrushInfo {
             database = textBoxDatabase.Text;
             this.DialogResult = DialogResult.OK;
             this.Visible = false;
+        }
+
+        private void onTextBoxFilterKeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                // Keep it from dinging because is is not multi-line
+                e.SuppressKeyPress = true;
+                List<String> filteredItems = getFilteredItems();
+                if (filteredItems != null) { }
+                listBoxBrushes.DataSource = filteredItems;
+            }
         }
     }
 }

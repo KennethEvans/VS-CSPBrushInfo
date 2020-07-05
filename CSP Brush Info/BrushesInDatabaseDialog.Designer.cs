@@ -36,6 +36,8 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.labelFilter = new System.Windows.Forms.Label();
+            this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelBundle.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
@@ -53,10 +55,11 @@
             this.tableLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
-            this.tableLayoutPanelTop.RowCount = 3;
+            this.tableLayoutPanelTop.RowCount = 4;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelTop.Size = new System.Drawing.Size(1062, 450);
             this.tableLayoutPanelTop.TabIndex = 0;
             // 
@@ -72,13 +75,15 @@
             this.tableLayoutPanelBundle.Controls.Add(this.labelDatabase, 0, 0);
             this.tableLayoutPanelBundle.Controls.Add(this.textBoxDatabase, 1, 0);
             this.tableLayoutPanelBundle.Controls.Add(this.buttonDatabaseBrowse, 2, 0);
+            this.tableLayoutPanelBundle.Controls.Add(this.labelFilter, 0, 1);
+            this.tableLayoutPanelBundle.Controls.Add(this.textBoxFilter, 1, 1);
             this.tableLayoutPanelBundle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBundle.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanelBundle.Name = "tableLayoutPanelBundle";
             this.tableLayoutPanelBundle.RowCount = 2;
             this.tableLayoutPanelBundle.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelBundle.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelBundle.Size = new System.Drawing.Size(1056, 48);
+            this.tableLayoutPanelBundle.Size = new System.Drawing.Size(1056, 92);
             this.tableLayoutPanelBundle.TabIndex = 1;
             // 
             // labelDatabase
@@ -124,9 +129,9 @@
             this.listBoxBrushes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxBrushes.FormattingEnabled = true;
             this.listBoxBrushes.ItemHeight = 31;
-            this.listBoxBrushes.Location = new System.Drawing.Point(3, 57);
+            this.listBoxBrushes.Location = new System.Drawing.Point(3, 101);
             this.listBoxBrushes.Name = "listBoxBrushes";
-            this.listBoxBrushes.Size = new System.Drawing.Size(1056, 336);
+            this.listBoxBrushes.Size = new System.Drawing.Size(1056, 272);
             this.listBoxBrushes.TabIndex = 2;
             // 
             // flowLayoutPanelButtons
@@ -138,7 +143,7 @@
             this.flowLayoutPanelButtons.Controls.Add(this.buttonFind);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonCancel);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonOk);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(336, 399);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(336, 379);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
             this.flowLayoutPanelButtons.Size = new System.Drawing.Size(390, 48);
             this.flowLayoutPanelButtons.TabIndex = 0;
@@ -186,6 +191,30 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
             // 
+            // labelFilter
+            // 
+            this.labelFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelFilter.AutoSize = true;
+            this.labelFilter.BackColor = System.Drawing.SystemColors.Control;
+            this.labelFilter.Location = new System.Drawing.Point(3, 48);
+            this.labelFilter.Name = "labelFilter";
+            this.labelFilter.Size = new System.Drawing.Size(87, 44);
+            this.labelFilter.TabIndex = 3;
+            this.labelFilter.Text = "Filter:";
+            this.labelFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelFilter, "Bundle file.");
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxFilter.Location = new System.Drawing.Point(154, 51);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(774, 38);
+            this.textBoxFilter.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textBoxFilter, "Bundle file.");
+            this.textBoxFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.onTextBoxFilterKeyDown);
+            // 
             // BrushesInDatabaseDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -219,5 +248,7 @@
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.ListBox listBoxBrushes;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label labelFilter;
+        private System.Windows.Forms.TextBox textBoxFilter;
     }
 }
