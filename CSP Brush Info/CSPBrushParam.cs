@@ -57,16 +57,36 @@ namespace CSPBrushInfo {
         }
 
         /// <summary>
-        /// Interprets the blob as an Effector.  Returns a blank string if the
-        /// name does not contain Effector.  Converts to BigEndian.
+        /// Interprets the blob.  Returns a blank string if the
+        /// name does not contain one of the items it can handle.  Converts to 
+        /// BigEndian.
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
         /// <returns></returns>
         string interpretBlob(byte[] bytes, string tab) {
             string info = "";
-            // Only do Effectors
-            if (!name.ToLower().Contains("effector")) return info;
+            if (name.ToLower().Contains("effector")) {
+                // Effectors
+                info = interpretEffector(bytes, tab);
+            } else if (name.Contains("BrushPatternImageArray")) {
+                info = interpretMaterial(bytes, tab);
+            } else if (name.Contains("TextureImage")) {
+                info = interpretMaterial(bytes, tab);
+            }
+            // Could possibly be usd for BrushSprayFixedPointArray
+            // But don't have any brushes with that or see it in the interface
+            return info;
+        }
+
+        /// <summary>
+        /// Interprets the blob as an Effector. Converts to BigEndian.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        string interpretEffector(byte[] bytes, string tab) {
+            string info = "";
             info = tab + "Interpreted:" + NL;
             int nBytes = bytes.Length;
             int nBytesRead = 0;
@@ -218,16 +238,98 @@ namespace CSPBrushInfo {
             }
         }
 
+        /// <summary>
+        /// Interprets the blob as a material. Useful for BrushPatternImageArray,
+        /// TextureImage, possibly BrushSprayFixedPointArray.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        string interpretMaterial(byte[] bytes, string tab) {
+            string info = "";
+            info = tab + "Interpreted:" + NL;
+            int nBytes = bytes.Length;
+            int nBytesRead = 0;
+            int iVal, nItems;
+            string identPlus, brushName, ident;
+            try {
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
+                    // Get first 2 integers
+                    if (nBytesRead == nBytes) return info;
+                    info += tab + tab;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    //info += String.Format("int1={0} ", iVal);
+                    if (nBytesRead == nBytes) return info;
+                    nItems = iVal = readInteger(reader);
+                    nBytesRead += 4;
+                    info += String.Format("nItems={0} ", iVal);
+                    info += NL;
+
+                    // Loop over tips
+                    for (int i = 0; i < nItems; i++) {
+                        identPlus = readName(reader);
+                        //info += identPlus + NL;
+                        brushName = readName(reader);
+                        ident = readName(reader);
+                        iVal = readInteger(reader);
+                        info += tab + tab + brushName + " [" + ident + "]" + NL;
+                        // Should end with 00 00 00 00
+                        //info += String.Format("nextInt={0} ", iVal) + NL;
+                    }
+                    return info;
+                }
+            } catch (Exception ex) {
+                info += "Error reading data for " + name + NL;
+                info += ex + NL;
+                return info;
+            }
+        }
+
         int readInteger(BinaryReader reader) {
             byte[] charData = reader.ReadBytes(4);
             Array.Reverse(charData);
             return BitConverter.ToInt32(charData, 0);
         }
 
+        int readShort(BinaryReader reader) {
+            byte[] charData = reader.ReadBytes(2);
+            Array.Reverse(charData);
+            return BitConverter.ToInt16(charData, 0);
+        }
+
         double readDouble(BinaryReader reader) {
             byte[] charData = reader.ReadBytes(8);
             Array.Reverse(charData);
             return BitConverter.ToDouble(charData, 0);
+        }
+
+        string readName(BinaryReader reader) {
+            string sVal;
+            int iVal1, nName;
+            string info = "";
+            // Read first number
+            iVal1 = readInteger(reader);
+            nName = readInteger(reader);
+            //info += "[" + iVal1 + "," + nName + "] ";
+            // Read the name
+            sVal = readChars(reader, nName);
+            info += sVal;
+            return info;
+        }
+
+        string readChars(BinaryReader reader, int nChars) {
+            byte[] bytes = reader.ReadBytes(nChars);
+            return Encoding.Unicode.GetString(bytes);
+        }
+
+        byte readByte(BinaryReader reader) {
+            return reader.ReadByte();
+        }
+
+        string byteInfo(byte bVal) {
+            char cVal = bVal < 32 ? '·' : (char)bVal;
+            return String.Format("{0} [{1:X2}h] {2}", bVal, bVal, cVal);
         }
 
         /// <summary>
@@ -247,7 +349,7 @@ namespace CSPBrushInfo {
                 string dump = HexDump.HexDump.Dump(iconBytes);
                 dump = HexDump.HexDump.indentLines(dump, tab);
                 info.Append(dump);
-                string interpret = interpretBlob(iconBytes, tab);
+                string interpret = interpretEffector(iconBytes, tab);
                 info.Append(interpret);
                 return info.ToString();
             }
