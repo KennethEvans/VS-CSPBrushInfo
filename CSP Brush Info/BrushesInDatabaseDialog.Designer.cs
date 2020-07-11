@@ -30,14 +30,14 @@
             this.labelDatabase = new System.Windows.Forms.Label();
             this.textBoxDatabase = new System.Windows.Forms.TextBox();
             this.buttonDatabaseBrowse = new System.Windows.Forms.Button();
+            this.labelFilter = new System.Windows.Forms.Label();
+            this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.listBoxBrushes = new System.Windows.Forms.ListBox();
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonFind = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.labelFilter = new System.Windows.Forms.Label();
-            this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelBundle.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
@@ -124,6 +124,30 @@
             this.buttonDatabaseBrowse.UseVisualStyleBackColor = false;
             this.buttonDatabaseBrowse.Click += new System.EventHandler(this.OnBrowseClick);
             // 
+            // labelFilter
+            // 
+            this.labelFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelFilter.AutoSize = true;
+            this.labelFilter.BackColor = System.Drawing.SystemColors.Control;
+            this.labelFilter.Location = new System.Drawing.Point(3, 48);
+            this.labelFilter.Name = "labelFilter";
+            this.labelFilter.Size = new System.Drawing.Size(87, 44);
+            this.labelFilter.TabIndex = 3;
+            this.labelFilter.Text = "Filter:";
+            this.labelFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelFilter, "Bundle file.");
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxFilter.Location = new System.Drawing.Point(154, 51);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(774, 38);
+            this.textBoxFilter.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textBoxFilter, "Bundle file.");
+            this.textBoxFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.onTextBoxFilterKeyDown);
+            // 
             // listBoxBrushes
             // 
             this.listBoxBrushes.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -190,30 +214,6 @@
             this.toolTip.SetToolTip(this.buttonOk, "Quit and svae the values.");
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
-            // 
-            // labelFilter
-            // 
-            this.labelFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelFilter.AutoSize = true;
-            this.labelFilter.BackColor = System.Drawing.SystemColors.Control;
-            this.labelFilter.Location = new System.Drawing.Point(3, 48);
-            this.labelFilter.Name = "labelFilter";
-            this.labelFilter.Size = new System.Drawing.Size(87, 44);
-            this.labelFilter.TabIndex = 3;
-            this.labelFilter.Text = "Filter:";
-            this.labelFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelFilter, "Bundle file.");
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxFilter.Location = new System.Drawing.Point(154, 51);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(774, 38);
-            this.textBoxFilter.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textBoxFilter, "Bundle file.");
-            this.textBoxFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.onTextBoxFilterKeyDown);
             // 
             // BrushesInDatabaseDialog
             // 

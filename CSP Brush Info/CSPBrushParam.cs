@@ -1,7 +1,14 @@
-﻿using System;
+﻿//#define GENERATE_RTF
+
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CSPBrushInfo {
     class CSPBrushParam : IComparer {
@@ -12,6 +19,12 @@ namespace CSPBrushInfo {
         private bool err;
         private string errorMessage;
 
+        /// <summary>
+        /// Returns the value as a string.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="typeName"></param>
+        /// <param name="value"></param>
         public CSPBrushParam(string name, string typeName, object value) {
             err = false;
             errorMessage = "No error";
@@ -19,7 +32,7 @@ namespace CSPBrushInfo {
             if (typeName != null && typeName.Length > 0) {
                 this.typeName = typeName;
             } else {
-                // TODO This is a kluge for not getting a valid typeName here
+                // TODO This is a kludge for not getting a valid typeName here
                 if (value.GetType() == typeof(byte[])) {
                     this.typeName = "(BLOB)";
                 } else {
@@ -30,7 +43,8 @@ namespace CSPBrushInfo {
         }
 
         /// <summary>
-        /// Returns an information string for this CSPBrushParam.
+        /// Returns an information string for this CSPBrushParam. This consists
+        /// of the Name and the result of getValueByString().
         /// </summary>
         /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
         /// <returns></returns>
@@ -40,19 +54,7 @@ namespace CSPBrushInfo {
             info.Append(name);
             info.Append(" [").Append(typeName).Append("]");
             info.Append(NL);
-            if (!typeName.Contains("BLOB")) {
-                info.Append(tab).Append(value);
-                info.Append(NL);
-            } else {
-                byte[] iconBytes = null;
-                iconBytes = (byte[])value;
-                info.Append(tab).Append(iconBytes.GetLength(0)).AppendLine(" bytes");
-                string dump = HexDump.HexDump.Dump(iconBytes);
-                dump = HexDump.HexDump.indentLines(dump, tab);
-                info.Append(dump);
-                string interpret = interpretBlob(iconBytes, tab);
-                info.Append(interpret);
-            }
+            info.Append(getValueAsString(tab));
             return info.ToString();
         }
 
@@ -70,9 +72,9 @@ namespace CSPBrushInfo {
                 // Effectors
                 info = interpretEffector(bytes, tab);
             } else if (name.Contains("BrushPatternImageArray")) {
-                info = interpretMaterial(bytes, tab);
+                info = interpretImage(bytes, tab);
             } else if (name.Contains("TextureImage")) {
-                info = interpretMaterial(bytes, tab);
+                info = interpretImage(bytes, tab);
             }
             // Could possibly be usd for BrushSprayFixedPointArray
             // But don't have any brushes with that or see it in the interface
@@ -219,15 +221,24 @@ namespace CSPBrushInfo {
                     info += NL;
 
                     // Get control Points
+                    PointF[] controlPoints = new PointF[nControlPoints];
                     for (int i = 0; i < nControlPoints; i++) {
                         pointX = readDouble(reader);
                         nBytesRead += 8;
                         pointY = readDouble(reader);
+                        controlPoints[i] = new PointF((float)pointX, (float)pointY);
                         nBytesRead += 8;
                         info += tab + "  " + String.Format(
                             "Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
                             i + 1, pointX, pointY) + NL;
                     }
+#if GENERATE_RTF
+                    // Create an image
+                    string rtfString = createEffectorImage(controlPoints);
+                    if (!String.IsNullOrEmpty(rtfString)) {
+                        info += rtfString + NL;
+                    }
+#endif
                     if (nBytesRead == nBytes) return info;
                     return info;
                 }
@@ -239,13 +250,148 @@ namespace CSPBrushInfo {
         }
 
         /// <summary>
+        /// Get an array of Images for the effectors
+        /// </summary>
+        /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
+        /// <returns></returns>
+        public List<Bitmap> getEffectorImages(string tab) {
+            if (!typeName.Contains("BLOB") ||
+                !name.ToLower().Contains("effector")) {
+                return null;
+            }
+            List<Bitmap> imageArray = new List<Bitmap>();
+            Bitmap image;
+            byte[] bytes = null;
+            bytes = (byte[])value;
+
+            int nBytes = bytes.Length;
+            int nBytesRead = 0;
+            int nControlPoints;
+            int iVal;
+            double pointX, pointY;
+            try {
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
+                    // Get first 11 integers
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    // Read 3 control point integers
+                    nControlPoints = 0;
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nControlPoints = iVal;
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    // Get control Points
+                    PointF[] controlPoints = new PointF[nControlPoints];
+                    for (int i = 0; i < nControlPoints; i++) {
+                        pointX = readDouble(reader);
+                        nBytesRead += 8;
+                        pointY = readDouble(reader);
+                        nBytesRead += 8;
+                        controlPoints[i] = new PointF((float)pointX, (float)pointY);
+                    }
+                    // Create the image
+                    image = getEffectorImage(controlPoints);
+                    if (image != null) {
+                        imageArray.Add(image);
+                    }
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    // Read 3 control point integers
+                    nControlPoints = 0;
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nControlPoints = iVal;
+                    nBytesRead += 4;
+
+                    if (nBytesRead == nBytes) return imageArray;
+                    iVal = readInteger(reader);
+                    nBytesRead += 4;
+
+                    // Get control Points
+                    controlPoints = new PointF[nControlPoints];
+                    for (int i = 0; i < nControlPoints; i++) {
+                        pointX = readDouble(reader);
+                        nBytesRead += 8;
+                        pointY = readDouble(reader);
+                        nBytesRead += 8;
+                        controlPoints[i] = new PointF((float)pointX, (float)pointY);
+                    }
+                    // Create the image
+                    image = getEffectorImage(controlPoints);
+                    if (image != null) {
+                        imageArray.Add(image);
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.Utils.excMsg("Error creating effector images for " + name,
+                    ex);
+            }
+            return imageArray;
+        }
+
+        /// <summary>
         /// Interprets the blob as a material. Useful for BrushPatternImageArray,
         /// TextureImage, possibly BrushSprayFixedPointArray.
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="tab">Prefix for each line, typically "  " or similar.</param>
         /// <returns></returns>
-        string interpretMaterial(byte[] bytes, string tab) {
+        string interpretImage(byte[] bytes, string tab) {
             string info = "";
             info = tab + "Interpreted:" + NL;
             int nBytes = bytes.Length;
@@ -341,18 +487,217 @@ namespace CSPBrushInfo {
             if (!typeName.Contains("BLOB")) {
                 return value.ToString() + NL;
             } else {
-                byte[] iconBytes = null;
-                iconBytes = (byte[])value;
+                byte[] bytes = (byte[])value;
                 StringBuilder info;
                 info = new StringBuilder();
-                info.AppendLine(iconBytes.GetLength(0) + " bytes");
-                string dump = HexDump.HexDump.Dump(iconBytes);
+                info.AppendLine(bytes.GetLength(0) + " bytes");
+                string dump = HexDump.HexDump.Dump(bytes);
                 dump = HexDump.HexDump.indentLines(dump, tab);
                 info.Append(dump);
-                string interpret = interpretEffector(iconBytes, tab);
+                string interpret = interpretBlob(bytes, tab);
                 info.Append(interpret);
                 return info.ToString();
             }
+        }
+
+#if GENERATE_RTF
+        /// <summary>
+        /// Creates an RTF string for an image that shows the effector graph.
+        /// </summary>
+        /// <param name="controlPoints">The control points for the effector.</param>
+        /// <returns></returns>
+        public string createEffectorImage(PointF[] controlPoints) {
+            string imageString = null;
+            string rtfString = null;
+            // !!!! Replace with getEffectorImage !!!
+            int margin = 10;
+            int w = 256, h = 256;
+            using (Bitmap bm = new Bitmap(w, h)) {
+                using (Graphics g = Graphics.FromImage(bm)) {
+                    g.Clear(Color.Red);
+                    g.Clear(Color.FromArgb(255, 191, 191, 191));
+                    GraphicsPath gp = new GraphicsPath();
+                    gp.AddLine(0, 0, 1, 0);
+                    gp.AddLine(0, 1, 1, 1);
+                    gp.AddLine(1, 1, 0, 1);
+                    gp.AddLine(0, 0, 0, 0);
+                    // Scale it
+                    Matrix m = new System.Drawing.Drawing2D.Matrix();
+                    m.Scale(w - 2 * margin, h - 2 * margin);
+                    m.Translate(margin, margin);
+                    gp.Transform(m);
+                    // Draw it
+                    using (Pen pen = new Pen(Color.Black)) {
+                        g.DrawPath(pen, gp);
+                    }
+                }
+                // Convert to bytes
+                using (MemoryStream ms = new MemoryStream()) {
+                    bm.Save(ms, ImageFormat.Png);
+                    byte[] bytes = ms.ToArray();
+                    string byteString = BitConverter.ToString(bytes, 0);
+                    if (!String.IsNullOrEmpty(byteString)) {
+                        imageString = byteString.Replace("-", string.Empty);
+                    }
+                }
+            }
+#if false
+            // Test
+            string fileName = @"C:\Users\evans\Pictures\Icon Images\BlueMouse.96x96.png";
+            byte[] bytes1 = System.IO.File.ReadAllBytes(fileName);
+            string byteString1 = BitConverter.ToString(bytes1, 0);
+            if (!String.IsNullOrEmpty(byteString1)) {
+                imageString = byteString1.Replace("-", string.Empty);
+            }
+#endif
+
+            // Convert to an RTF string
+            if (!String.IsNullOrEmpty(imageString)) {
+                rtfString = @"{\pict\pngblip"
+                    + @"\picw" + w.ToString() + @"\pich" + h.ToString()
+                    + @"\picwgoal" + w.ToString() + @"\pichgoal" + h.ToString()
+                    + @" " + imageString + "}";
+            }
+            return rtfString;
+        }
+#endif
+
+        /// <summary>
+        /// Creates an image that shows the effector graph for the given control points.
+        /// </summary>
+        /// <param name="controlPoints">The control points for the effector.</param>
+        /// <returns></returns>
+        public Bitmap getEffectorImage(PointF[] controlPoints) {
+            // DEBUG
+            //return new Bitmap(@"C:\Users\evans\Pictures\Icon Images\BlueMouse.256x256.png");
+            int margin = 10;
+            int w = 256, h = w;
+            float scale = w - 2 * margin;
+            Bitmap bm = new Bitmap(w, h);
+            // Could use this in RTfUtils instead of Control DPI but not being done currently
+            //bm.SetResolution(96, 96);
+            using (Graphics g = Graphics.FromImage(bm)) {
+                // Scale it so we can work in [0,1] coordinate axes,
+                // with y increasing up
+                Matrix m = new System.Drawing.Drawing2D.Matrix();
+                m.Scale(1f, -1f);
+                m.Translate(0, -h);
+                m.Translate(margin, margin);
+                m.Scale(scale, scale);
+                g.Transform = m;
+                g.Clear(Color.FromArgb(191, 191, 191));
+                // Grid lines
+                using (Pen pen = new Pen(Color.White, 1 / scale)) {
+                    for (int i = 1; i < 4; i++) {
+                        g.DrawLine(pen, .25f * i, 0, .25f * i, 1);
+                        g.DrawLine(pen, 0, .25f * i, 1, .25f * i);
+                    }
+                }
+                // Axes
+                using (Pen pen = new Pen(Color.Black, 1 / scale)) {
+                    g.DrawLine(pen, 0, 0, 1, 0);
+                    g.DrawLine(pen, 1, 0, 1, 1);
+                    g.DrawLine(pen, 1, 1, 0, 1);
+                    g.DrawLine(pen, 0, 1, 0, 0);
+                }
+                // Control points
+                using (Brush brush = new SolidBrush(Color.FromArgb(140, 152, 252))) {
+                    int width = 9;  // Should be odd
+                    int off = (width - 1) / 2;
+                    foreach (PointF point in controlPoints) {
+                        g.FillRectangle(brush,
+                            new RectangleF(point.X - off / scale, point.Y - off / scale,
+                            width / scale, width / scale));
+                    }
+                }
+                // Control point lines
+                using (Pen pen = new Pen(Color.FromArgb(140, 152, 252), 2 / scale)) {
+                    float xPrev = controlPoints[0].X;
+                    float yPrev = controlPoints[0].Y;
+                    for (int i = 1; i < controlPoints.Length; i++) {
+                        g.DrawLine(pen, xPrev, yPrev, controlPoints[i].X, controlPoints[i].Y);
+                        xPrev = controlPoints[i].X;
+                        yPrev = controlPoints[i].Y;
+                    }
+                }
+                // Curves
+                PointF[] ccp;
+                using (Pen pen = new Pen(Color.Black, 2 / scale)) {
+                    int nPoints = controlPoints.Length;
+                    if (nPoints == 2) {
+                        g.DrawLine(pen, controlPoints[0], controlPoints[1]);
+                    } else if (nPoints == 3) {
+                        ccp = cubicBezier(controlPoints[0], controlPoints[1], controlPoints[2]);
+                        g.DrawBezier(pen, ccp[0], ccp[1], ccp[2], ccp[3]);
+                    } else if (nPoints > 3) {
+                        // First
+                        ccp = cubicBezier(controlPoints[0], controlPoints[1],
+                            midpoint(controlPoints[1], controlPoints[2]));
+                        g.DrawBezier(pen, ccp[0], ccp[1], ccp[2], ccp[3]);
+                        // Middle
+                        for (int i = 2; i < nPoints - 2; i++) {
+                            ccp = cubicBezier(midpoint(controlPoints[i - 1], controlPoints[i]),
+                                controlPoints[i],
+                                midpoint(controlPoints[i], controlPoints[i + 1]));
+                            g.DrawBezier(pen, ccp[0], ccp[1], ccp[2], ccp[3]);
+                        }
+                        // Last
+                        ccp = cubicBezier(midpoint(controlPoints[nPoints - 3], controlPoints[nPoints - 2]),
+                            controlPoints[nPoints - 2],
+                           controlPoints[nPoints - 1]);
+                        g.DrawBezier(pen, ccp[0], ccp[1], ccp[2], ccp[3]);
+                    }
+                }
+            }
+            bm.Save(@"C:\Scratch\AAA\" + name + "TestDocument.png", ImageFormat.Png);
+            return bm;
+        }
+
+        /// <summary>
+        /// Calculates the cubic Bezier points corresponding to a quadratic Bezier.
+        /// </summary>
+        /// <param name="qp0">Quadratic point.</param>
+        /// <param name="qp1">Quadratic point.</param>
+        /// <param name="qp2">Quadratic point.</param>
+        /// <returns>Cubic points as float {cp0, cp1, cp2, cp3}.</returns>
+        PointF[] cubicBezier(PointF qp0, PointF qp1, PointF qp2) {
+            float fract = 2.0f / 3.0f;
+            PointF cp0 = qp0;
+            PointF cp1 = new PointF(qp0.X + fract * (qp1.X - qp0.X),
+                qp0.Y + fract * (qp1.Y - qp0.Y));
+            PointF cp2 = new PointF(qp2.X + fract * (qp1.X - qp2.X),
+                qp2.Y + fract * (qp1.Y - qp2.Y));
+            PointF cp3 = qp2;
+            return new PointF[] { cp0, cp1, cp2, cp3 };
+        }
+
+        PointF midpoint(PointF p0, PointF p1) {
+            return new PointF(.5f * (p0.X + p1.X), .5f * (p0.Y + p1.Y));
+        }
+
+
+        /// <summary>
+        /// Separates an info string in the text part and the RTF for a pict,
+        /// which is of the form {\pict....}.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static string[] splitInfo(string info) {
+            Regex RTF_PICT_REGX = new Regex("\\{\\\\pict(.*)\\}");
+            Match match = RTF_PICT_REGX.Match(info);
+            string rtf = "";
+            string newInfo = info;
+            if (match.Success) {
+                int nGroups = match.Groups.Count;
+                string value;
+                foreach (Group group in match.Groups) {
+                    value = group.Value;
+                    rtf += value;
+                }
+                // Remove all the patterns from info
+                newInfo = RTF_PICT_REGX.Replace(newInfo, "");
+            }
+            return new string[] { newInfo, rtf };
         }
 
         /// <summary>
@@ -370,15 +715,15 @@ namespace CSPBrushInfo {
                 }
                 return this.value.Equals(param.value);
             }
-            byte[] iconBytes = (byte[])this.value; ;
-            byte[] iconBytesParam = (byte[])param.value;
-            int len = iconBytes.GetLength(0);
-            int lenParam = iconBytesParam.GetLength(0);
+            byte[] bytes = (byte[])this.value;
+            byte[] bytesParam = (byte[])param.value;
+            int len = bytes.GetLength(0);
+            int lenParam = bytesParam.GetLength(0);
             if (len != lenParam) {
                 return false;
             }
             for (int i = 0; i < len; i++) {
-                if (iconBytes[i] != iconBytesParam[i]) {
+                if (bytes[i] != bytesParam[i]) {
                     return false;
                 }
             }

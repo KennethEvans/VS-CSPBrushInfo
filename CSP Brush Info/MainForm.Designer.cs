@@ -54,13 +54,14 @@
             this.flowLayoutPanelBrush2 = new System.Windows.Forms.FlowLayoutPanel();
             this.radioButtonVariant2 = new System.Windows.Forms.RadioButton();
             this.radioButtonInitVariant2 = new System.Windows.Forms.RadioButton();
-            this.textBoxInfo = new System.Windows.Forms.TextBox();
+            this.textBoxInfo = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonProcess1 = new System.Windows.Forms.Button();
             this.buttonProcess2 = new System.Windows.Forms.Button();
             this.buttonCompare = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.saveRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelTop.SuspendLayout();
             this.groupBoxBrush1.SuspendLayout();
             this.tableLayoutPanelGroupBrush1.SuspendLayout();
@@ -174,28 +175,29 @@
             // 
             this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveRTFToolStripMenuItem,
             this.toolStripMenuItemOverview,
             this.toolStripSeparator1,
             this.toolStripMenuItemAbout});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(219, 102);
+            this.contextMenuStrip.Size = new System.Drawing.Size(361, 203);
             // 
             // toolStripMenuItemOverview
             // 
             this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
-            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(360, 46);
             this.toolStripMenuItemOverview.Text = "Overview";
             this.toolStripMenuItemOverview.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(215, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(357, 6);
             // 
             // toolStripMenuItemAbout
             // 
             this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
-            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(360, 46);
             this.toolStripMenuItemAbout.Text = "About";
             this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
@@ -490,11 +492,10 @@
             this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxInfo.Location = new System.Drawing.Point(3, 400);
             this.textBoxInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxInfo.Multiline = true;
             this.textBoxInfo.Name = "textBoxInfo";
-            this.textBoxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxInfo.Size = new System.Drawing.Size(1534, 659);
             this.textBoxInfo.TabIndex = 4;
+            this.textBoxInfo.Text = "";
             // 
             // flowLayoutPanelButtons
             // 
@@ -573,6 +574,13 @@
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitCick);
             // 
+            // saveRTFToolStripMenuItem
+            // 
+            this.saveRTFToolStripMenuItem.Name = "saveRTFToolStripMenuItem";
+            this.saveRTFToolStripMenuItem.Size = new System.Drawing.Size(360, 46);
+            this.saveRTFToolStripMenuItem.Text = "Save RTF";
+            this.saveRTFToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRtfClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -617,7 +625,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelButtons;
         private System.Windows.Forms.Button buttonProcess1;
         private System.Windows.Forms.Button buttonQuit;
-        private System.Windows.Forms.TextBox textBoxInfo;
+        private System.Windows.Forms.RichTextBox textBoxInfo;
         private System.Windows.Forms.Button buttonProcess2;
         private System.Windows.Forms.Button buttonCompare;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
@@ -649,6 +657,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelBrush2;
         private System.Windows.Forms.RadioButton radioButtonVariant2;
         private System.Windows.Forms.RadioButton radioButtonInitVariant2;
+        private System.Windows.Forms.ToolStripMenuItem saveRTFToolStripMenuItem;
     }
 }
 

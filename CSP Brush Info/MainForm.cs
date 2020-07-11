@@ -1,4 +1,5 @@
-﻿//#define debugging
+﻿//#define GENERATE_RTF
+//#define debugging
 //#define replaceDoctype
 
 using System;
@@ -94,7 +95,7 @@ namespace CSPBrushInfo {
             string brushName = textBoxBrush.Text;
             if (brushName == null | brushName.Length == 0) {
                 registerOutput(fileType, info, paramsList);
-                Utils.Utils.errMsg(brushName + " not specified");
+                Utils.Utils.errMsg("Brush not specified");
                 return;
             }
 
@@ -233,14 +234,17 @@ namespace CSPBrushInfo {
                 }
                 if (!found) {
                     textBoxInfo.AppendText(param1.Name + NL);
-                    textBoxInfo.AppendText("  1: " + param1.getValueAsString("  "));
+                    appendInfo(param1, "  1: " + param1.getValueAsString("  "));
+                    appendImages(param1);
                     textBoxInfo.AppendText("  2: Not found in 2" + NL);
                     continue;
                 }
                 if (found && !param1.equals(foundParam)) {
                     textBoxInfo.AppendText(param1.Name + NL);
-                    textBoxInfo.AppendText("  1: " + param1.getValueAsString("  "));
-                    textBoxInfo.AppendText("  2: " + foundParam.getValueAsString("  "));
+                    appendInfo(param1, "  1: " + param1.getValueAsString("  "));
+                    appendImages(param1);
+                    appendInfo(foundParam, "  2: " + foundParam.getValueAsString("  "));
+                    appendImages(foundParam);
                 }
             }
 
@@ -347,6 +351,85 @@ namespace CSPBrushInfo {
             }
         }
 
+        /// <summary>
+        /// Processes images to be included in the RTF.  Generates an RTF
+        /// string and inserts it into textBoxInfo.
+        /// </summary>
+        /// <param name="images"></param>
+        private void processImagesUsingRtf(List<Bitmap> images) {
+            try {
+                textBoxInfo.AppendText("    ");
+                String rtf;
+                foreach (Bitmap bm in images) {
+                    rtf = Utils.RTFUtils.imageRtf(textBoxInfo, bm);
+                    if (!String.IsNullOrEmpty(rtf)) {
+                        Utils.RTFUtils.appendRtb(textBoxInfo, rtf);
+                        textBoxInfo.AppendText("    ");
+                    }
+                }
+                textBoxInfo.AppendText(NL);
+            } catch (Exception ex) {
+                Utils.Utils.excMsg("processImagesUsingRtf: " +
+                    "Error processing effector images", ex);
+            }
+        }
+
+        /// <summary>
+        /// Processes images to be included in the RTF.  Uses cut and paste 
+        /// from the clibboard.
+        /// </summary>
+        /// <param name="images"></param>
+        private void processImagesUsingClibboard(List<Bitmap> images) {
+#if false
+            DataFormats.Format format = DataFormats.GetFormat(DataFormats.Bitmap);
+            DataFormats.Format formatRtf = DataFormats.GetFormat(DataFormats.Rtf);
+            DataFormats.Format formatEnhancedMetFile = DataFormats.GetFormat(DataFormats.EnhancedMetafile);
+            DataFormats.Format formatMetafilePict = DataFormats.GetFormat(DataFormats.MetafilePict);
+            DataFormats.Format formatDib = DataFormats.GetFormat(DataFormats.Dib);
+            DataFormats.Format formatSdi = DataFormats.GetFormat("System.Drawing.Bitmap");
+#endif
+            // Get the current contents and restore it later
+            //IDataObject oldData = Clipboard.GetDataObject();
+
+            try {
+                textBoxInfo.AppendText("    ");
+                foreach (Bitmap bm in images) {
+                    Clipboard.SetImage(bm);
+                    //Clipboard.SetData("System.Drawing.Bitmap", image);
+                    //Clipboard.SetData(DataFormats.Bitmap, bm);
+#if false
+                    bool clipBoardHasBitmap = Clipboard.ContainsData(DataFormats.Bitmap);
+                    bool clipBoardContainsImage = Clipboard.ContainsImage();
+                    bool clipBoardContainsSDI = Clipboard.ContainsData("System.Drawing.Bitmap");
+                    object data = Clipboard.GetData("System.Drawing.Bitmap");
+                    IDataObject dataObject = Clipboard.GetDataObject();
+                    string[] formats = dataObject.GetFormats(true);
+                    string info = "ContainsData(Bitmap): " + clipBoardHasBitmap + NL
+                        + "ContainsImage: " + clipBoardContainsImage + NL
+                        + "Contains System.Drawing.Bitmap: " + clipBoardContainsSDI + NL
+                        + "bm=" + bm + " " + bm.ToString() + NL
+                        + "bm=" + bm + " width=" + bm.Width + " height=" + bm.Height + NL
+                        + "     Hres==" + bm.HorizontalResolution + " Vres=" + bm.VerticalResolution + NL
+                        + "data==null: " + (data == null) + NL
+                        + "data=" + data + NL;
+                    info += "    " + "nFormats=" + formats.Length + NL;
+                    foreach (string fmt in formats) {
+                        info += "    " + fmt + NL;
+                    }
+                    Utils.Utils.infoMsg(info);
+#endif
+                    textBoxInfo.Paste();
+                    textBoxInfo.AppendText("  ");
+                }
+                textBoxInfo.AppendText(NL);
+            } catch (Exception ex) {
+                Utils.Utils.excMsg("processImagesUsingClibboard:" +
+                    " Error processing effector images", ex);
+            } finally {
+                //Clipboard.SetDataObject(oldData);
+            }
+        }
+
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
             Properties.Settings.Default.DatabaseName1 = textBoxDatabase1.Text;
             Properties.Settings.Default.DatabaseName2 = textBoxDatabase2.Text;
@@ -357,12 +440,39 @@ namespace CSPBrushInfo {
             Properties.Settings.Default.Save();
         }
 
+        private void appendInfo(CSPBrushParam param, string info) {
+#if GENERATE_RTF
+                string[] split = CSPBrushParam.splitInfo(info);
+                if (!String.IsNullOrEmpty(split[0])) {
+                    textBoxInfo.AppendText(split[0]);
+                }
+                if (!String.IsNullOrEmpty(split[1])) {
+                    textBoxInfo.SelectedRtf = split[1];
+                }
+#else
+            textBoxInfo.AppendText(info);
+#endif
+        }
+
+        private void appendImages(CSPBrushParam param) {
+            if (param.Name.ToLower().Contains("effector")) {
+                List<Bitmap> images = param.getEffectorImages("  ");
+                if (images != null && images.Count > 0) {
+                    // Inset RTF string
+                    processImagesUsingRtf(images);
+                    // Paste using the Clipboard
+                    //processImagesUsingClibboard(images);
+                }
+            }
+        }
+
         private void OnProcess1Click(object sender, EventArgs e) {
             processDatabase(FileType.Database1, true);
             textBoxInfo.Clear();
             printHeading(FileType.Database1);
             foreach (CSPBrushParam param in params1) {
-                textBoxInfo.AppendText(param.info("  "));
+                appendInfo(param, param.info("  "));
+                appendImages(param);
             }
         }
 
@@ -371,7 +481,8 @@ namespace CSPBrushInfo {
             textBoxInfo.Clear();
             printHeading(FileType.Database2);
             foreach (CSPBrushParam param in params2) {
-                textBoxInfo.AppendText(param.info("  "));
+                appendInfo(param, param.info("  "));
+                appendImages(param);
             }
         }
 
@@ -452,5 +563,21 @@ namespace CSPBrushInfo {
             }
         }
 
+        private void OnSaveRtfClick(object sender, EventArgs e) {
+            if (textBoxInfo == null) {
+                return;
+            }
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "RTF Files|*.rtf";
+            dlg.Title = "Save as RTF";
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                try {
+                    textBoxInfo.SaveFile(dlg.FileName,
+                        RichTextBoxStreamType.RichText);
+                } catch (Exception ex) {
+                    Utils.Utils.excMsg("Error saving RTF", ex);
+                }
+            }
+        }
     }
 }
