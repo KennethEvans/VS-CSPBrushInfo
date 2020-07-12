@@ -31,6 +31,7 @@
             this.tableLayoutPanelDatabase1 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxDatabase1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.saveRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemOverview = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@
             this.buttonCompare = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.saveRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelTop.SuspendLayout();
             this.groupBoxBrush1.SuspendLayout();
             this.tableLayoutPanelGroupBrush1.SuspendLayout();
@@ -180,24 +180,31 @@
             this.toolStripSeparator1,
             this.toolStripMenuItemAbout});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(361, 203);
+            this.contextMenuStrip.Size = new System.Drawing.Size(219, 148);
+            // 
+            // saveRTFToolStripMenuItem
+            // 
+            this.saveRTFToolStripMenuItem.Name = "saveRTFToolStripMenuItem";
+            this.saveRTFToolStripMenuItem.Size = new System.Drawing.Size(218, 46);
+            this.saveRTFToolStripMenuItem.Text = "Save RTF";
+            this.saveRTFToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRtfClick);
             // 
             // toolStripMenuItemOverview
             // 
             this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
-            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
             this.toolStripMenuItemOverview.Text = "Overview";
             this.toolStripMenuItemOverview.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(357, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(215, 6);
             // 
             // toolStripMenuItemAbout
             // 
             this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
-            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
             this.toolStripMenuItemAbout.Text = "About";
             this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
@@ -573,13 +580,6 @@
             this.toolTip.SetToolTip(this.buttonQuit, "Quit the application.");
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitCick);
-            // 
-            // saveRTFToolStripMenuItem
-            // 
-            this.saveRTFToolStripMenuItem.Name = "saveRTFToolStripMenuItem";
-            this.saveRTFToolStripMenuItem.Size = new System.Drawing.Size(360, 46);
-            this.saveRTFToolStripMenuItem.Text = "Save RTF";
-            this.saveRTFToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRtfClick);
             // 
             // MainForm
             // 

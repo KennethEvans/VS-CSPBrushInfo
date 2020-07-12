@@ -168,13 +168,17 @@ namespace Utils {
         /// <returns></returns>
         private static string getImagePrefix(Control control, Image image) {
             StringBuilder rtf = new StringBuilder();
+#if false
             // Get the DPI from the Control
+            // (Will size based on pixels and the Control's DPI)
             float[] dpi = getDpi(control);
             float xDpi = dpi[0];
             float yDpi = dpi[1];
+#else
             // Get the DPI from the image DPI
-            //float xDpi = image.HorizontalResolution;
-            //float yDpi = image.VerticalResolution;
+            float xDpi = image.HorizontalResolution;
+            float yDpi = image.VerticalResolution;
+#endif
             // Calculate the current width of the image in (0.01)mm
             int picw = (int)Math.Round((image.Width / xDpi) * HMM_PER_INCH);
             // Calculate the current height of the image in (0.01)mm
@@ -360,11 +364,11 @@ namespace Utils {
         /// <returns></returns>
         private static string getFontTable(Font font) {
 
-                StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-                // Append table control string
-                sb.Append(@"{\fonttbl{\f0");
-                sb.Append(@"\");
+            // Append table control string
+            sb.Append(@"{\fonttbl{\f0");
+            sb.Append(@"\");
 
 #if false
             // KE: Not implementing this and apparently is not needed:
@@ -382,14 +386,14 @@ namespace Utils {
             // 0 is for ANSI.
             sb.Append(@"\fcharset0 ");
 
-                // Append the name of the font
-                sb.Append(font.Name);
+            // Append the name of the font
+            sb.Append(font.Name);
 
-                // Close control string
-                sb.Append(@";}}");
+            // Close control string
+            sb.Append(@";}}");
 
-                return sb.ToString();
-            }
+            return sb.ToString();
+        }
 
 #if false
             /// <summary>

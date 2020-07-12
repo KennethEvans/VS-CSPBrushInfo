@@ -1,5 +1,4 @@
-﻿//#define GENERATE_RTF
-//#define debugging
+﻿//#define debugging
 //#define replaceDoctype
 
 using System;
@@ -374,62 +373,6 @@ namespace CSPBrushInfo {
             }
         }
 
-        /// <summary>
-        /// Processes images to be included in the RTF.  Uses cut and paste 
-        /// from the clibboard.
-        /// </summary>
-        /// <param name="images"></param>
-        private void processImagesUsingClibboard(List<Bitmap> images) {
-#if false
-            DataFormats.Format format = DataFormats.GetFormat(DataFormats.Bitmap);
-            DataFormats.Format formatRtf = DataFormats.GetFormat(DataFormats.Rtf);
-            DataFormats.Format formatEnhancedMetFile = DataFormats.GetFormat(DataFormats.EnhancedMetafile);
-            DataFormats.Format formatMetafilePict = DataFormats.GetFormat(DataFormats.MetafilePict);
-            DataFormats.Format formatDib = DataFormats.GetFormat(DataFormats.Dib);
-            DataFormats.Format formatSdi = DataFormats.GetFormat("System.Drawing.Bitmap");
-#endif
-            // Get the current contents and restore it later
-            //IDataObject oldData = Clipboard.GetDataObject();
-
-            try {
-                textBoxInfo.AppendText("    ");
-                foreach (Bitmap bm in images) {
-                    Clipboard.SetImage(bm);
-                    //Clipboard.SetData("System.Drawing.Bitmap", image);
-                    //Clipboard.SetData(DataFormats.Bitmap, bm);
-#if false
-                    bool clipBoardHasBitmap = Clipboard.ContainsData(DataFormats.Bitmap);
-                    bool clipBoardContainsImage = Clipboard.ContainsImage();
-                    bool clipBoardContainsSDI = Clipboard.ContainsData("System.Drawing.Bitmap");
-                    object data = Clipboard.GetData("System.Drawing.Bitmap");
-                    IDataObject dataObject = Clipboard.GetDataObject();
-                    string[] formats = dataObject.GetFormats(true);
-                    string info = "ContainsData(Bitmap): " + clipBoardHasBitmap + NL
-                        + "ContainsImage: " + clipBoardContainsImage + NL
-                        + "Contains System.Drawing.Bitmap: " + clipBoardContainsSDI + NL
-                        + "bm=" + bm + " " + bm.ToString() + NL
-                        + "bm=" + bm + " width=" + bm.Width + " height=" + bm.Height + NL
-                        + "     Hres==" + bm.HorizontalResolution + " Vres=" + bm.VerticalResolution + NL
-                        + "data==null: " + (data == null) + NL
-                        + "data=" + data + NL;
-                    info += "    " + "nFormats=" + formats.Length + NL;
-                    foreach (string fmt in formats) {
-                        info += "    " + fmt + NL;
-                    }
-                    Utils.Utils.infoMsg(info);
-#endif
-                    textBoxInfo.Paste();
-                    textBoxInfo.AppendText("  ");
-                }
-                textBoxInfo.AppendText(NL);
-            } catch (Exception ex) {
-                Utils.Utils.excMsg("processImagesUsingClibboard:" +
-                    " Error processing effector images", ex);
-            } finally {
-                //Clipboard.SetDataObject(oldData);
-            }
-        }
-
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
             Properties.Settings.Default.DatabaseName1 = textBoxDatabase1.Text;
             Properties.Settings.Default.DatabaseName2 = textBoxDatabase2.Text;
@@ -441,27 +384,15 @@ namespace CSPBrushInfo {
         }
 
         private void appendInfo(CSPBrushParam param, string info) {
-#if GENERATE_RTF
-                string[] split = CSPBrushParam.splitInfo(info);
-                if (!String.IsNullOrEmpty(split[0])) {
-                    textBoxInfo.AppendText(split[0]);
-                }
-                if (!String.IsNullOrEmpty(split[1])) {
-                    textBoxInfo.SelectedRtf = split[1];
-                }
-#else
             textBoxInfo.AppendText(info);
-#endif
         }
 
         private void appendImages(CSPBrushParam param) {
             if (param.Name.ToLower().Contains("effector")) {
                 List<Bitmap> images = param.getEffectorImages("  ");
                 if (images != null && images.Count > 0) {
-                    // Inset RTF string
+                    // Insert RTF string
                     processImagesUsingRtf(images);
-                    // Paste using the Clipboard
-                    //processImagesUsingClibboard(images);
                 }
             }
         }
@@ -521,6 +452,7 @@ namespace CSPBrushInfo {
 
         private void OnBrowseBrush1Click(object sender, EventArgs e) {
             string databaseName = textBoxDatabase1.Text;
+            string brushName = textBoxBrush1.Text;
             if (databaseName == null || databaseName.Length == 0) {
                 Utils.Utils.errMsg("Database 1 is not defined");
                 return;
@@ -529,7 +461,8 @@ namespace CSPBrushInfo {
                 Utils.Utils.errMsg("Database 1 does not exist");
                 return;
             }
-            BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName);
+            BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName,
+                brushName);
             // Create, show, or set visible the preferences dialog as appropriate
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 if (dlg.SelectedBrush != null) {
@@ -543,6 +476,7 @@ namespace CSPBrushInfo {
 
         private void OnBrowseBrush2Click(object sender, EventArgs e) {
             string databaseName = textBoxDatabase2.Text;
+            string brushName = textBoxBrush2.Text;
             if (databaseName == null || databaseName.Length == 0) {
                 Utils.Utils.errMsg("Database 2 is not defined");
                 return;
@@ -551,7 +485,8 @@ namespace CSPBrushInfo {
                 Utils.Utils.errMsg("Database 2 does not exist");
                 return;
             }
-            BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName);
+            BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName,
+              brushName);
             // Create, show, or set visible the preferences dialog as appropriate
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 if (dlg.SelectedBrush != null) {

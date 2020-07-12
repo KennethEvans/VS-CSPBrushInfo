@@ -1,6 +1,4 @@
-﻿//#define GENERATE_RTF
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -232,13 +230,6 @@ namespace CSPBrushInfo {
                             "Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
                             i + 1, pointX, pointY) + NL;
                     }
-#if GENERATE_RTF
-                    // Create an image
-                    string rtfString = createEffectorImage(controlPoints);
-                    if (!String.IsNullOrEmpty(rtfString)) {
-                        info += rtfString + NL;
-                    }
-#endif
                     if (nBytesRead == nBytes) return info;
                     return info;
                 }
@@ -574,8 +565,9 @@ namespace CSPBrushInfo {
             int w = 256, h = w;
             float scale = w - 2 * margin;
             Bitmap bm = new Bitmap(w, h);
-            // Could use this in RTfUtils instead of Control DPI but not being done currently
-            //bm.SetResolution(96, 96);
+            // RTfUtils uses this to set the size
+            float sizeInches = 1.0f;
+            bm.SetResolution(w / sizeInches, h / sizeInches);
             using (Graphics g = Graphics.FromImage(bm)) {
                 // Scale it so we can work in [0,1] coordinate axes,
                 // with y increasing up

@@ -9,13 +9,15 @@ namespace CSPBrushInfo {
         private string selected;
         private string database;
         private List<string> items;
+        private string origName;
 
         public string SelectedBrush { get => selected; set => selected = value; }
         public string Database { get => database; set => database = value; }
 
-        public BrushesInDatabaseDialog(string bundleName) {
+        public BrushesInDatabaseDialog(string bundleName, string origName) {
             InitializeComponent();
 
+            this.origName = origName;
             textBoxDatabase.Text = bundleName;
             textBoxDatabase.Select(0, 0);
             find();
@@ -97,6 +99,13 @@ namespace CSPBrushInfo {
                 } else {
                     listBoxBrushes.DataSource = items;
                 }
+                // Select the original item
+                if (!String.IsNullOrEmpty(origName)) {
+                    int index = listBoxBrushes.FindString(origName);
+                    if (index >= 0) {
+                        listBoxBrushes.SelectedIndex = index;
+                    }
+                }
             } catch (Exception ex) {
                 Utils.Utils.excMsg("Failed to get brushes", ex);
                 return;
@@ -133,6 +142,13 @@ namespace CSPBrushInfo {
                 List<String> filteredItems = getFilteredItems();
                 if (filteredItems != null) { }
                 listBoxBrushes.DataSource = filteredItems;
+                // Select the original item
+                if (!String.IsNullOrEmpty(origName)) {
+                    int index = listBoxBrushes.FindString(origName);
+                    if (index >= 0) {
+                        listBoxBrushes.SelectedIndex = index;
+                    }
+                }
             }
         }
     }
