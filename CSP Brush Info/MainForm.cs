@@ -13,9 +13,10 @@ namespace CSPBrushInfo {
 
     public partial class MainForm : Form {
         enum FileType { Database1, Database2, Brush1, Brush2 };
-        public readonly int PROCESS_TIMEOUT = 5000; // ms
-        public readonly String NL = Environment.NewLine;
+        public static readonly int PROCESS_TIMEOUT = 5000; // ms
+        public static readonly String NL = Environment.NewLine;
         private static ScrolledHTMLDialog overviewDlg;
+        private static ScrolledTextDialog textDlg;
 
         private List<CSPBrushParam> params1 = new List<CSPBrushParam>();
         private List<CSPBrushParam> params2 = new List<CSPBrushParam>();
@@ -513,7 +514,7 @@ namespace CSPBrushInfo {
             }
         }
 
-        private void OnQuitCick(object sender, EventArgs e) {
+        private void OnQuitClick(object sender, EventArgs e) {
             Close();
         }
 
@@ -607,26 +608,65 @@ namespace CSPBrushInfo {
             }
         }
 
-        public class NodeInfo {
-            string nodeName;
-            int nodeVariantId;
-            int nodeInitVariantId;
-
-            public string NodeName { get => nodeName; set => nodeName = value; }
-            public int NodeVariantId { get => nodeVariantId; set => nodeVariantId = value; }
-            public int NodeInitVariantId { get => nodeInitVariantId; set => nodeInitVariantId = value; }
-
-
-            public NodeInfo(string nodeName, int nodeVariantId, int nodeInitVariantId) {
-                NodeName = nodeName;
-                NodeVariantId = nodeVariantId;
-                NodeInitVariantId = nodeInitVariantId;
+        private void OnShowToolHierarchy(object sender, EventArgs e) {
+            string label = sender.ToString();
+            string database;
+            if (label.StartsWith("Database 2")) {
+                database = textBoxDatabase2.Text;
+            } else {
+                database = textBoxDatabase1.Text;
             }
-
-            public string Info() {
-                return nodeName + " NodeVariantId=" + nodeVariantId
-                    + " NodeInitVariantId=" + nodeInitVariantId;
+            string info = DatabaseUtils.getToolHierarchy(database);
+            // Create, show, or set visible the overview dialog as appropriate
+            if (textDlg == null) {
+                MainForm app = (MainForm)FindForm().FindForm();
+                textDlg = new ScrolledTextDialog(
+                    Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)),
+                    info);
+                textDlg.Text = "Tool Hierarchy";
+                textDlg.Show();
+            } else {
+                textDlg.Visible = true;
             }
+        }
+
+        // RichTextBox context menu
+        private void OnCutClick(object sender, EventArgs e) {
+            textBoxInfo.Cut();
+        }
+
+        private void OnCopyClick(object sender, EventArgs e) {
+            textBoxInfo.Copy();
+        }
+
+        private void OnPasteClick(object sender, EventArgs e) {
+            textBoxInfo.Paste();
+        }
+
+        private void OnSelectAllClick(object sender, EventArgs e) {
+            textBoxInfo.SelectAll();
+        }
+    }
+
+    public class NodeInfo {
+        string nodeName;
+        int nodeVariantId;
+        int nodeInitVariantId;
+
+        public string NodeName { get => nodeName; set => nodeName = value; }
+        public int NodeVariantId { get => nodeVariantId; set => nodeVariantId = value; }
+        public int NodeInitVariantId { get => nodeInitVariantId; set => nodeInitVariantId = value; }
+
+
+        public NodeInfo(string nodeName, int nodeVariantId, int nodeInitVariantId) {
+            NodeName = nodeName;
+            NodeVariantId = nodeVariantId;
+            NodeInitVariantId = nodeInitVariantId;
+        }
+
+        public string Info() {
+            return nodeName + " NodeVariantId=" + nodeVariantId
+                + " NodeInitVariantId=" + nodeInitVariantId;
         }
     }
 }

@@ -83,6 +83,7 @@
       <DependentUpon>BrushesInDatabaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CSPBrushParam.cs" />
+    <Compile Include="DatabaseUtils.cs" />
     <Compile Include="HexDump.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -104,6 +105,12 @@
     </Compile>
     <Compile Include="ScrolledHTMLDialog.designer.cs">
       <DependentUpon>ScrolledHTMLDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScrolledTextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScrolledTextDialog.designer.cs">
+      <DependentUpon>ScrolledTextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="AboutBox.resx">
@@ -130,6 +137,9 @@
     </Compile>
     <EmbeddedResource Include="ScrolledHTMLDialog.resx">
       <DependentUpon>ScrolledHTMLDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScrolledTextDialog.resx">
+      <DependentUpon>ScrolledTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.manifest" />
     <None Include="LICENSE" />

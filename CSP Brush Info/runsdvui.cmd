@@ -1,0 +1,2 @@
+cd /d "C:\Users\evans\Documents\Visual Studio 2017\Projects\CSP Brush Info\CSP Brush Info" &msbuild "CSP Brush Info.csproj" /t:sdvViewer /p:configuration="Release" /p:platform=Any CPU
+exit %errorlevel% 

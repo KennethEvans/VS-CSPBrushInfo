@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace CSPBrushInfo {
     class CSPBrushParam : IComparer {
-        public readonly String NL = Environment.NewLine;
+        public static readonly String NL = Environment.NewLine;
         private string name;
         private string typeName;
         private object value;
