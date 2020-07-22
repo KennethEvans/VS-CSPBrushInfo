@@ -98,7 +98,7 @@
             this.labelDatabase.TabIndex = 0;
             this.labelDatabase.Text = "Database:";
             this.labelDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelDatabase, "Bundle file.");
+            this.toolTip.SetToolTip(this.labelDatabase, "Specify database or SUT file.");
             // 
             // textBoxDatabase
             // 
@@ -107,7 +107,7 @@
             this.textBoxDatabase.Name = "textBoxDatabase";
             this.textBoxDatabase.Size = new System.Drawing.Size(774, 38);
             this.textBoxDatabase.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textBoxDatabase, "Bundle file.");
+            this.toolTip.SetToolTip(this.textBoxDatabase, "Specify database or SUT file.");
             // 
             // buttonDatabaseBrowse
             // 
@@ -120,7 +120,7 @@
             this.buttonDatabaseBrowse.Size = new System.Drawing.Size(119, 42);
             this.buttonDatabaseBrowse.TabIndex = 2;
             this.buttonDatabaseBrowse.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonDatabaseBrowse, "Browse for a bundle file.");
+            this.toolTip.SetToolTip(this.buttonDatabaseBrowse, "Browse for a database or SUT file.");
             this.buttonDatabaseBrowse.UseVisualStyleBackColor = false;
             this.buttonDatabaseBrowse.Click += new System.EventHandler(this.OnBrowseClick);
             // 
@@ -136,7 +136,7 @@
             this.labelFilter.TabIndex = 3;
             this.labelFilter.Text = "Filter:";
             this.labelFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelFilter, "Bundle file.");
+            this.toolTip.SetToolTip(this.labelFilter, "Filter the brushes.\r\nCR to execute.\r\nClear text, then CR to stop filtering.");
             // 
             // textBoxFilter
             // 
@@ -144,8 +144,8 @@
             this.textBoxFilter.Location = new System.Drawing.Point(154, 51);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(774, 38);
-            this.textBoxFilter.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textBoxFilter, "Bundle file.");
+            this.textBoxFilter.TabIndex = 4;
+            this.toolTip.SetToolTip(this.textBoxFilter, "Filter the brushes.\r\nCR to execute.\r\nClear text, then CR to stop filtering.");
             this.textBoxFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.onTextBoxFilterKeyDown);
             // 
             // listBoxBrushes
@@ -156,7 +156,8 @@
             this.listBoxBrushes.Location = new System.Drawing.Point(3, 101);
             this.listBoxBrushes.Name = "listBoxBrushes";
             this.listBoxBrushes.Size = new System.Drawing.Size(1056, 272);
-            this.listBoxBrushes.TabIndex = 2;
+            this.listBoxBrushes.TabIndex = 0;
+            this.toolTip.SetToolTip(this.listBoxBrushes, "Available brush names.");
             // 
             // flowLayoutPanelButtons
             // 
@@ -183,7 +184,7 @@
             this.buttonFind.Size = new System.Drawing.Size(192, 42);
             this.buttonFind.TabIndex = 2;
             this.buttonFind.Text = "Find Brushes";
-            this.toolTip.SetToolTip(this.buttonFind, "Get or refresh the brushes in the bundle.");
+            this.toolTip.SetToolTip(this.buttonFind, "Get or refresh the brushes in the database.");
             this.buttonFind.UseVisualStyleBackColor = true;
             this.buttonFind.Click += new System.EventHandler(this.OnFindClick);
             // 
@@ -211,7 +212,7 @@
             this.buttonOk.Size = new System.Drawing.Size(66, 42);
             this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "OK";
-            this.toolTip.SetToolTip(this.buttonOk, "Quit and svae the values.");
+            this.toolTip.SetToolTip(this.buttonOk, "Quit and save the selected value.");
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
             // 

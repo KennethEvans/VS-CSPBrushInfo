@@ -91,24 +91,25 @@ namespace CSPBrushInfo {
             int nBytes = bytes.Length;
             int nBytesRead = 0;
             int nControlPoints;
+            int nHeader;
             int iVal;
             double pointX, pointY;
             bool pressureUsed = false, tiltUsed = false, velocityUsed = false, randomUsed = false;
             try {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
-                    // Get first 11 integers
-                    if (nBytesRead == nBytes) return info;
+                    // Get first 10 or 11 integers, depending on nHeader
+                    if (nBytesRead == nBytes) return info + NL;
                     info += tab + "  ";
-                    iVal = readInteger(reader);
+                    nHeader = iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("undetermined1={0} ", iVal);
+                    info += String.Format("nHeader={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined2={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("usedFlag={0} ", iVal);
@@ -117,74 +118,81 @@ namespace CSPBrushInfo {
                     if ((iVal & 0x40) != 0) velocityUsed = true;
                     if ((iVal & 0x80) != 0) randomUsed = true;
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("pmin={0} ", iVal);
+                    // Write warning if unexpected nHeader
+                    if (nHeader < 40 || nHeader > 44) {
+                        info += "        [!!! Can only interpret nHeader = 40 or 44. Expect errors]";
+                    }
                     info += NL + tab + "    (pressureUsed=" + pressureUsed
                         + " tiltUsed=" + tiltUsed
                         + " velocityUsed=" + velocityUsed
                         + " randomUsed=" + randomUsed
                         + ")";
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     info += NL + tab + "  ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("tMin={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("vMax={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("rMax={0} ", iVal);
+                    info += String.Format("rMin={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined8={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     info += NL + tab + "  ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined9={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined10={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-                    info += String.Format("tMax={0} ", iVal);
+                    if (nBytesRead == nBytes) return info+ NL;
+                    if (nHeader > 40) {
+                        // Older files with 40-byte header don't have this
+                        iVal = readInteger(reader);
+                        nBytesRead += 4;
+                        info += String.Format("tMax={0} ", iVal);
+                    } else {
+                        info += String.Format("tMax=unspecified");
+                    }
+                    if (nBytesRead == nBytes) return info + NL;
+                    info += NL;
 
                     // Read 3 control point integers
                     nControlPoints = 0;
-                    if (nBytesRead == nBytes) {
-                        info += NL;
-                        return info;
-                    }
-                    info += NL + tab + "Control Points 1: ";
+                    info += tab + "Control Points 1: ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined1={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
-                    iVal = readInteger(reader);
-                    nControlPoints = iVal;
+                    if (nBytesRead == nBytes) return info + NL;
+                    nControlPoints = iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("nPoints={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined3={0} ", iVal);
+                    if (nBytesRead == nBytes) return info + NL;
                     info += NL;
 
                     // Get control Points
@@ -200,22 +208,21 @@ namespace CSPBrushInfo {
                     if (nBytesRead == nBytes) return info;
                     // Read 3 control point integers
                     nControlPoints = 0;
-                    if (nBytesRead == nBytes) return info;
                     info += tab + "Control Points 2: ";
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined1={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
-                    iVal = readInteger(reader);
-                    nControlPoints = iVal;
+                    if (nBytesRead == nBytes) return info + NL;
+                    nControlPoints = iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("nPoints={0} ", iVal);
 
-                    if (nBytesRead == nBytes) return info;
+                    if (nBytesRead == nBytes) return info + NL;
                     iVal = readInteger(reader);
                     nBytesRead += 4;
                     info += String.Format("undetermined3={0} ", iVal);
+                    if (nBytesRead == nBytes) return info + NL;
                     info += NL;
 
                     // Get control Points
@@ -230,11 +237,10 @@ namespace CSPBrushInfo {
                             "Point {0}: {1,8:#0.0000} {2,8:#0.0000}",
                             i + 1, pointX, pointY) + NL;
                     }
-                    if (nBytesRead == nBytes) return info;
                     return info;
                 }
             } catch (Exception ex) {
-                info += "Error reading data for " + name + NL;
+                info += "Error interpreting binary data for " + name + NL;
                 info += ex + NL;
                 return info;
             }
@@ -258,54 +264,22 @@ namespace CSPBrushInfo {
             int nBytes = bytes.Length;
             int nBytesRead = 0;
             int nControlPoints;
+            int nHeader;
             int iVal;
             double pointX, pointY;
             try {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
-                    // Get first 11 integers
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
+                    // Get first 10 or 11 integers, depending on nHeader
+                    nHeader = iVal = readInteger(reader); // 1
                     nBytesRead += 4;
 
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
-
-                    if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nBytesRead += 4;
+                    // Read the rest of the header (9 or 10 values depending on nHeader)
+                    int nVals = nHeader / 4;
+                    for (int i = 0; i < nVals - 1; i++) {
+                        if (nBytesRead == nBytes) return imageArray;
+                        iVal = readInteger(reader);
+                        nBytesRead += 4;
+                    }
 
                     // Read 3 control point integers
                     nControlPoints = 0;
@@ -314,8 +288,7 @@ namespace CSPBrushInfo {
                     nBytesRead += 4;
 
                     if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nControlPoints = iVal;
+                    nControlPoints = iVal = readInteger(reader);
                     nBytesRead += 4;
 
                     if (nBytesRead == nBytes) return imageArray;
@@ -345,8 +318,7 @@ namespace CSPBrushInfo {
                     nBytesRead += 4;
 
                     if (nBytesRead == nBytes) return imageArray;
-                    iVal = readInteger(reader);
-                    nControlPoints = iVal;
+                    nControlPoints = iVal = readInteger(reader);
                     nBytesRead += 4;
 
                     if (nBytesRead == nBytes) return imageArray;
@@ -388,36 +360,65 @@ namespace CSPBrushInfo {
             int nBytes = bytes.Length;
             int nBytesRead = 0;
             int iVal, nItems;
-            string identPlus, brushName, ident;
+            string identPlus, imageName, ident;
             try {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(bytes))) {
                     // Get first 2 integers
                     if (nBytesRead == nBytes) return info;
                     info += tab + tab;
-                    iVal = readInteger(reader);
+                    iVal = readInteger(reader);  // Seems to always be 8
                     nBytesRead += 4;
                     //info += String.Format("int1={0} ", iVal);
                     if (nBytesRead == nBytes) return info;
                     nItems = iVal = readInteger(reader);
                     nBytesRead += 4;
-                    info += String.Format("nItems={0} ", iVal);
-                    info += NL;
+                    info += String.Format("nItems={0} ", iVal) + NL;
 
-                    // Loop over tips
+                    // Loop over items
+                    int iVal1, nName, nSize;
+                    long length = reader.BaseStream.Length;
+                    long position;
                     for (int i = 0; i < nItems; i++) {
-                        identPlus = readName(reader);
-                        //info += identPlus + NL;
-                        brushName = readName(reader);
-                        ident = readName(reader);
-                        iVal = readInteger(reader);
-                        info += tab + tab + brushName + " [" + ident + "]" + NL;
-                        // Should end with 00 00 00 00
-                        //info += String.Format("nextInt={0} ", iVal) + NL;
+                        identPlus = ident = imageName = "<Not found>";
+                        // This iVal1 is the size of the BLOB minus the first two integers
+                        nSize = iVal1 = readInteger(reader);
+                        nName = readInteger(reader);
+                        position = reader.BaseStream.Position;
+                        identPlus = readName(reader, nName);
+                        //info += "After identPlus [" + iVal1 + "," + nName + "] "
+                        //    + "position=" + position + "/" + length + NL;
+                        while (true) {
+                            nName = -1;
+                            iVal1 = readInteger(reader);
+                            position = reader.BaseStream.Position;
+                            //info += "After iVal1 [" + iVal1 + "," + nName + "] " 
+                            //    + "position=" + position + "/" + length + NL;
+                            if (iVal1 == 0) break;
+                            if (position == length) break;
+                            nName = readInteger(reader);
+                            position = reader.BaseStream.Position;
+                            if (position == length) break;
+                            if (iVal1 == 1) {
+                                ident = readName(reader, nName);
+                            } else {
+                                // In most cases iVal1 = 2, but have also seen 3
+                                imageName = readName(reader, nName);
+                            }
+                            position = reader.BaseStream.Position;
+                            //info += "After readName [" + iVal1 + "," + nName + "] " 
+                            //    + "position=" + position + "/" + length + NL;
+                        }
+                        position = reader.BaseStream.Position;
+                        //info += "At end [" + iVal1 + "," + nName + "] "
+                        //    + "position=" + position + "/" + length + NL;
+                        info += tab + tab + imageName + NL
+                            + tab + tab + tab + "Original Path=" + identPlus + NL
+                            + tab + tab + tab + "Catalog Path=" + ident + NL;
                     }
                     return info;
                 }
             } catch (Exception ex) {
-                info += "Error reading data for " + name + NL;
+                info += "Error interpreting binary data for " + name + NL;
                 info += ex + NL;
                 return info;
             }
@@ -441,18 +442,10 @@ namespace CSPBrushInfo {
             return BitConverter.ToDouble(charData, 0);
         }
 
-        string readName(BinaryReader reader) {
+        string readName(BinaryReader reader, int nChars) {
             string sVal;
-            int iVal1, nName;
-            string info = "";
-            // Read first number
-            iVal1 = readInteger(reader);
-            nName = readInteger(reader);
-            //info += "[" + iVal1 + "," + nName + "] ";
-            // Read the name
-            sVal = readChars(reader, nName);
-            info += sVal;
-            return info;
+            sVal = readChars(reader, nChars);
+            return sVal;
         }
 
         string readChars(BinaryReader reader, int nChars) {

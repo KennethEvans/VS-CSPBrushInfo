@@ -75,8 +75,8 @@ namespace CSPBrushInfo {
             paramsList = new List<CSPBrushParam>();
             info = "";
             String name = "";
-            string nodeName;
-            int nodeVariantId, nodeInitVariantId;
+            string nodeName = null;
+            int nodeVariantId = 0, nodeInitVariantId = 0;
             int nCols = 0;
             int nNull = 0;
             name = textBoxDatabase.Text;
@@ -117,6 +117,7 @@ namespace CSPBrushInfo {
                     command.CommandText = "SELECT NodeName, NodeVariantId, " +
                         "NodeInitVariantId FROM Node WHERE NodeName='"
                         + brushName + "'";
+                    List<NodeInfo> items = new List<NodeInfo>();
                     using (dataReader = command.ExecuteReader()) {
                         if (!dataReader.HasRows) {
                             Utils.Utils.errMsg("No matching rows looking for "
@@ -124,26 +125,85 @@ namespace CSPBrushInfo {
                             registerOutput(fileType, info, paramsList);
                             return;
                         }
-                        dataReader.Read();
-                        nodeName = dataReader.GetString(0);
-                        nodeVariantId = dataReader.GetInt32(1);
-                        nodeInitVariantId = dataReader.GetInt32(2);
-                        if (!nodeName.Equals(brushName)) {
-                            Utils.Utils.errMsg("Looking for " + brushName + ", found "
-                                + nodeName);
-                            registerOutput(fileType, info, paramsList);
-                            return;
+                        while (dataReader.Read()) {
+                            nodeName = dataReader.GetString(0);
+                            nodeVariantId = dataReader.GetInt32(1);
+                            nodeInitVariantId = dataReader.GetInt32(2);
+                            items.Add(new NodeInfo(nodeName, nodeVariantId, nodeInitVariantId));
                         }
-                        if (nodeVariantId == 0) {
-                            Utils.Utils.errMsg(brushName
-                                + " is not a brush (No Nodevariant Id)");
+                    }
+                    if (items.Count == 0) {
+                        Utils.Utils.errMsg("Did not find any matches for " + brushName);
+                        registerOutput(fileType, info, paramsList);
+                        return;
+                    }
+                    if (items.Count == 1) {
+                        nodeName = items[0].NodeName;
+                        nodeVariantId = items[0].NodeVariantId;
+                        nodeInitVariantId = items[0].NodeInitVariantId;
+                    } else {
+                        // Found more than one matching item, prompt for which one
+                        List<string> itemsList = new List<string>();
+                        foreach (NodeInfo nodeInfo in items) {
+                            itemsList.Add(nodeInfo.Info());
+                        }
+                        MultiChoiceListDialog dlg = new MultiChoiceListDialog(itemsList);
+                        switch (fileType) {
+                            case FileType.Database1:
+                                dlg.Text = "Brush 1 Ambiguity";
+                                break;
+                            case FileType.Database2:
+                                dlg.Text = "Brush 2 Ambiguity";
+                                break;
+                            default:
+                                dlg.Text = "Brush Ambiguity";
+                                break;
+                        }
+                        // Note that the ListBox has be set to have SelectionMode=One,
+                        // not MultiExtended
+                        if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                            List<string> selectedList = dlg.SelectedList;
+                            if (selectedList == null || selectedList.Count == 0) {
+                                Utils.Utils.errMsg("No items selected");
+                                registerOutput(fileType, info, paramsList);
+                                return;
+                            }
+                            // There should be only one entry
+                            string item = selectedList[0];
+                            nodeName = null;
+                            foreach (NodeInfo nodeInfo in items) {
+                                if (item.Equals(nodeInfo.Info())) {
+                                    nodeName = nodeInfo.NodeName;
+                                    nodeVariantId = nodeInfo.NodeVariantId;
+                                    nodeInitVariantId = nodeInfo.NodeInitVariantId;
+                                }
+                            }
+                        } else {
+                            info += "Cancelled" + NL;
                             registerOutput(fileType, info, paramsList);
                             return;
                         }
                     }
+                    // These should not happen
+                    if (nodeName == null) {
+                        Utils.Utils.errMsg("Failed to determine which brush");
+                        registerOutput(fileType, info, paramsList);
+                    }
+                    if (!nodeName.Equals(brushName)) {
+                        Utils.Utils.errMsg("Looking for " + brushName + ", found "
+                            + nodeName);
+                        registerOutput(fileType, info, paramsList);
+                        return;
+                    }
+                    if (nodeVariantId == 0) {
+                        Utils.Utils.errMsg(brushName
+                            + " is not a brush (No NodeVariantId)");
+                        registerOutput(fileType, info, paramsList);
+                        return;
+                    }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Failed to find " + brushName, ex);
+                Utils.Utils.excMsg("Error finding " + brushName, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
             }
@@ -159,7 +219,7 @@ namespace CSPBrushInfo {
                     int variantId = (radioButtonVariant.Checked) ?
                         nodeVariantId : nodeInitVariantId;
                     command.CommandText = "SELECT * FROM Variant WHERE VariantID="
-                        + variantId;
+                                            + variantId;
                     using (dataReader = command.ExecuteReader()) {
                         if (!dataReader.HasRows) {
                             Utils.Utils.errMsg("No matching rows looking for VariantID = "
@@ -170,7 +230,7 @@ namespace CSPBrushInfo {
                         dataReader.Read();
                         nCols = dataReader.FieldCount;
                         if (print) {
-                            textBoxInfo.AppendText(info + NL);
+                            appendInfo(info + NL);
                         }
                         for (int i = 0; i < nCols; i++) {
                             if (dataReader.IsDBNull(i)) {
@@ -180,14 +240,14 @@ namespace CSPBrushInfo {
                             param = new CSPBrushParam(dataReader.GetName(i),
                                 dataReader.GetDataTypeName(i), dataReader.GetValue(i));
                             param.Value = dataReader.GetValue(i);
-                            //    textBoxInfo.AppendText(param.info());
+                            //    appendInfo(param.info());
                             //}
                             paramsList.Add(param);
                         }
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Failed to find VariantID=" + nodeVariantId, ex);
+                Utils.Utils.excMsg("Error finding VariantID=" + nodeVariantId, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
             }
@@ -216,7 +276,7 @@ namespace CSPBrushInfo {
             // Write heading to textBoxInfo
             textBoxInfo.Text = "1: ";
             printHeading(FileType.Database1);
-            textBoxInfo.AppendText("2: ");
+            appendInfo("2: ");
             printHeading(FileType.Database2);
             // Look for items in 2 that are in 1
             bool found;
@@ -232,40 +292,49 @@ namespace CSPBrushInfo {
                     }
                 }
                 if (!found) {
-                    textBoxInfo.AppendText(param1.Name + NL);
-                    appendInfo(param1, "  1: " + param1.getValueAsString("  "));
+                    appendInfo(param1.Name + NL);
+                    appendInfo("  1: " + param1.getValueAsString("  "));
                     appendImages(param1);
-                    textBoxInfo.AppendText("  2: Not found in 2" + NL);
+                    appendInfo("  2: Not found in 2" + NL);
                     continue;
                 }
                 if (found && !param1.equals(foundParam)) {
-                    textBoxInfo.AppendText(param1.Name + NL);
-                    appendInfo(param1, "  1: " + param1.getValueAsString("  "));
+                    appendInfo(param1.Name + NL);
+                    appendInfo("  1: " + param1.getValueAsString("  "));
                     appendImages(param1);
-                    appendInfo(foundParam, "  2: " + foundParam.getValueAsString("  "));
+                    appendInfo("  2: " + foundParam.getValueAsString("  "));
                     appendImages(foundParam);
                 }
             }
 
             // Look for items in 2 that are not in 1
-            textBoxInfo.AppendText(NL);
             foreach (CSPBrushParam param2 in params2) {
                 found = false;
                 // Look for the same name
                 foreach (CSPBrushParam param1 in params1) {
                     if (param1.Name.Equals(param2.Name)) {
                         found = true;
-                        foundParam = param2;
                         break;
                     }
                 }
                 if (!found) {
-                    textBoxInfo.AppendText(param2.Name + NL);
-                    textBoxInfo.AppendText("  1: Not found in 1" + NL);
-                    textBoxInfo.AppendText("  2: " + foundParam.getValueAsString("  "));
-                    break;
+                    appendInfo(param2.Name + NL);
+                    appendInfo("  1: Not found in 1" + NL);
+                    appendInfo("  2: " + param2.getValueAsString("  "));
+                    appendImages(param2);
+                    continue;
                 }
             }
+        }
+
+        /// <summary>
+        /// Searchs textBoxInfo for "Error";
+        /// </summary>
+        /// <returns></returns>
+        private bool checkForErrors() {
+            int index = textBoxInfo.Find("Error ",
+                RichTextBoxFinds.MatchCase & RichTextBoxFinds.NoHighlight);
+            return index != -1;
         }
 
         private void getFileName(FileType type) {
@@ -342,10 +411,10 @@ namespace CSPBrushInfo {
         private void printHeading(FileType type) {
             switch (type) {
                 case FileType.Database1:
-                    textBoxInfo.AppendText(info1 + NL);
+                    appendInfo(info1 + NL);
                     break;
                 case FileType.Database2:
-                    textBoxInfo.AppendText(info2 + NL);
+                    appendInfo(info2 + NL);
                     break;
             }
         }
@@ -357,19 +426,18 @@ namespace CSPBrushInfo {
         /// <param name="images"></param>
         private void processImagesUsingRtf(List<Bitmap> images) {
             try {
-                textBoxInfo.AppendText("    ");
+                appendInfo("    ");
                 String rtf;
                 foreach (Bitmap bm in images) {
                     rtf = Utils.RTFUtils.imageRtf(textBoxInfo, bm);
                     if (!String.IsNullOrEmpty(rtf)) {
                         Utils.RTFUtils.appendRtb(textBoxInfo, rtf);
-                        textBoxInfo.AppendText("    ");
+                        appendInfo("    ");
                     }
                 }
-                textBoxInfo.AppendText(NL);
+                appendInfo(NL);
             } catch (Exception ex) {
-                Utils.Utils.excMsg("processImagesUsingRtf: " +
-                    "Error processing effector images", ex);
+                Utils.Utils.excMsg("Error processing effector images", ex);
             }
         }
 
@@ -383,7 +451,7 @@ namespace CSPBrushInfo {
             Properties.Settings.Default.Save();
         }
 
-        private void appendInfo(CSPBrushParam param, string info) {
+        private void appendInfo(string info) {
             textBoxInfo.AppendText(info);
         }
 
@@ -397,13 +465,29 @@ namespace CSPBrushInfo {
             }
         }
 
+        /// <summary>
+        /// Inserts the given text at the start of textBoxInfo.
+        /// </summary>
+        /// <param name="text"></param>
+        private void InsertAtInfoTop(string text) {
+            if (String.IsNullOrEmpty(text)) return;
+            textBoxInfo.SelectionStart = 0;
+            textBoxInfo.SelectionLength = 0;
+            textBoxInfo.SelectedText = text;
+        }
+
         private void OnProcess1Click(object sender, EventArgs e) {
             processDatabase(FileType.Database1, true);
             textBoxInfo.Clear();
             printHeading(FileType.Database1);
             foreach (CSPBrushParam param in params1) {
-                appendInfo(param, param.info("  "));
+                appendInfo(param.info("  "));
                 appendImages(param);
+            }
+            // Check for errors
+            if (checkForErrors()) {
+                InsertAtInfoTop("!!! Note: There were errors during processing"
+                    + NL + NL);
             }
         }
 
@@ -412,13 +496,21 @@ namespace CSPBrushInfo {
             textBoxInfo.Clear();
             printHeading(FileType.Database2);
             foreach (CSPBrushParam param in params2) {
-                appendInfo(param, param.info("  "));
+                appendInfo(param.info("  "));
                 appendImages(param);
+            }
+            // Check for errors
+            if (checkForErrors()) {
+                InsertAtInfoTop("!!! There are errors" + NL + NL);
             }
         }
 
         private void OnCompareClick(object sender, EventArgs e) {
             compare();
+            // Check for errors
+            if (checkForErrors()) {
+                InsertAtInfoTop("!!! There are errors" + NL + NL);
+            }
         }
 
         private void OnQuitCick(object sender, EventArgs e) {
@@ -512,6 +604,28 @@ namespace CSPBrushInfo {
                 } catch (Exception ex) {
                     Utils.Utils.excMsg("Error saving RTF", ex);
                 }
+            }
+        }
+
+        public class NodeInfo {
+            string nodeName;
+            int nodeVariantId;
+            int nodeInitVariantId;
+
+            public string NodeName { get => nodeName; set => nodeName = value; }
+            public int NodeVariantId { get => nodeVariantId; set => nodeVariantId = value; }
+            public int NodeInitVariantId { get => nodeInitVariantId; set => nodeInitVariantId = value; }
+
+
+            public NodeInfo(string nodeName, int nodeVariantId, int nodeInitVariantId) {
+                NodeName = nodeName;
+                NodeVariantId = nodeVariantId;
+                NodeInitVariantId = nodeInitVariantId;
+            }
+
+            public string Info() {
+                return nodeName + " NodeVariantId=" + nodeVariantId
+                    + " NodeInitVariantId=" + nodeInitVariantId;
             }
         }
     }

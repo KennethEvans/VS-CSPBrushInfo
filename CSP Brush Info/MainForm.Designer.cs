@@ -110,7 +110,7 @@
             this.groupBoxBrush1.Name = "groupBoxBrush1";
             this.groupBoxBrush1.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
             this.groupBoxBrush1.Size = new System.Drawing.Size(1530, 179);
-            this.groupBoxBrush1.TabIndex = 1;
+            this.groupBoxBrush1.TabIndex = 0;
             this.groupBoxBrush1.TabStop = false;
             this.groupBoxBrush1.Text = "Brush 1";
             // 
@@ -169,7 +169,7 @@
             this.textBoxDatabase1.Name = "textBoxDatabase1";
             this.textBoxDatabase1.Size = new System.Drawing.Size(1206, 38);
             this.textBoxDatabase1.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textBoxDatabase1, "Bundle 1 file.");
+            this.toolTip.SetToolTip(this.textBoxDatabase1, "Database or SUT file for 1.");
             // 
             // contextMenuStrip
             // 
@@ -220,7 +220,7 @@
             this.buttonFileBrowse1.Size = new System.Drawing.Size(119, 42);
             this.buttonFileBrowse1.TabIndex = 2;
             this.buttonFileBrowse1.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonFileBrowse1, "Browse for bundle 1.");
+            this.toolTip.SetToolTip(this.buttonFileBrowse1, "Browse for Database or SUT file for  1.");
             this.buttonFileBrowse1.UseVisualStyleBackColor = false;
             this.buttonFileBrowse1.Click += new System.EventHandler(this.OnBrowseDatabase1Click);
             // 
@@ -233,7 +233,7 @@
             this.textBoxBrush1.Name = "textBoxBrush1";
             this.textBoxBrush1.Size = new System.Drawing.Size(1206, 38);
             this.textBoxBrush1.TabIndex = 4;
-            this.toolTip.SetToolTip(this.textBoxBrush1, "A brush in bundle 1.");
+            this.toolTip.SetToolTip(this.textBoxBrush1, "Specify brush in Database 1.");
             // 
             // buttonBrush1
             // 
@@ -247,7 +247,7 @@
             this.buttonBrush1.Size = new System.Drawing.Size(119, 42);
             this.buttonBrush1.TabIndex = 5;
             this.buttonBrush1.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonBrush1, "Browse the brushes in bundle 1.");
+            this.toolTip.SetToolTip(this.buttonBrush1, "Browse for brush in Database 2.");
             this.buttonBrush1.UseVisualStyleBackColor = false;
             this.buttonBrush1.Click += new System.EventHandler(this.OnBrowseBrush1Click);
             // 
@@ -263,7 +263,7 @@
             this.labelFile1.TabIndex = 0;
             this.labelFile1.Text = "Database 1:";
             this.labelFile1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelFile1, "Bundle 1 file.");
+            this.toolTip.SetToolTip(this.labelFile1, "Database or SUT file for 1.");
             // 
             // labelBrush1
             // 
@@ -277,7 +277,7 @@
             this.labelBrush1.TabIndex = 3;
             this.labelBrush1.Text = "Brush 1:";
             this.labelBrush1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelBrush1, "A brush in bundle 1.");
+            this.toolTip.SetToolTip(this.labelBrush1, "Specify brush in Database 1.");
             // 
             // flowLayoutPanelBrush1
             // 
@@ -299,9 +299,10 @@
             this.radioButtonVariant1.Name = "radioButtonVariant1";
             this.radioButtonVariant1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.radioButtonVariant1.Size = new System.Drawing.Size(254, 36);
-            this.radioButtonVariant1.TabIndex = 1;
+            this.radioButtonVariant1.TabIndex = 0;
             this.radioButtonVariant1.TabStop = true;
             this.radioButtonVariant1.Text = "NodeVariantId";
+            this.toolTip.SetToolTip(this.radioButtonVariant1, "Use NodeVariantId for current and NodeInitVariant for default.");
             this.radioButtonVariant1.UseVisualStyleBackColor = true;
             // 
             // radioButtonInitVariant1
@@ -312,8 +313,9 @@
             this.radioButtonInitVariant1.Name = "radioButtonInitVariant1";
             this.radioButtonInitVariant1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.radioButtonInitVariant1.Size = new System.Drawing.Size(299, 36);
-            this.radioButtonInitVariant1.TabIndex = 2;
+            this.radioButtonInitVariant1.TabIndex = 1;
             this.radioButtonInitVariant1.Text = "NodeIInitVariantId";
+            this.toolTip.SetToolTip(this.radioButtonInitVariant1, "Use NodeVariantId for current and NodeInitVariant for default.");
             this.radioButtonInitVariant1.UseVisualStyleBackColor = true;
             // 
             // groupBoxBrush2
@@ -327,7 +329,7 @@
             this.groupBoxBrush2.Name = "groupBoxBrush2";
             this.groupBoxBrush2.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
             this.groupBoxBrush2.Size = new System.Drawing.Size(1530, 179);
-            this.groupBoxBrush2.TabIndex = 2;
+            this.groupBoxBrush2.TabIndex = 1;
             this.groupBoxBrush2.TabStop = false;
             this.groupBoxBrush2.Text = "Brush 2";
             // 
@@ -386,7 +388,7 @@
             this.labelFile2.TabIndex = 0;
             this.labelFile2.Text = "Database 2:";
             this.labelFile2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelFile2, "Bundle 2 file.");
+            this.toolTip.SetToolTip(this.labelFile2, "Database or SUT file for 2.");
             // 
             // textBoxDatabase2
             // 
@@ -397,7 +399,7 @@
             this.textBoxDatabase2.Name = "textBoxDatabase2";
             this.textBoxDatabase2.Size = new System.Drawing.Size(1206, 38);
             this.textBoxDatabase2.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textBoxDatabase2, "Bundle 2 file.");
+            this.toolTip.SetToolTip(this.textBoxDatabase2, "Database or SUT file for 2.");
             // 
             // buttonBrowseFile2
             // 
@@ -411,7 +413,7 @@
             this.buttonBrowseFile2.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowseFile2.TabIndex = 2;
             this.buttonBrowseFile2.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonBrowseFile2, "Browse for bundle 2.");
+            this.toolTip.SetToolTip(this.buttonBrowseFile2, "Browse for Database or SUT file for  2\r\n..");
             this.buttonBrowseFile2.UseVisualStyleBackColor = false;
             this.buttonBrowseFile2.Click += new System.EventHandler(this.OnBrowseDatabase2Click);
             // 
@@ -424,7 +426,7 @@
             this.textBoxBrush2.Name = "textBoxBrush2";
             this.textBoxBrush2.Size = new System.Drawing.Size(1206, 38);
             this.textBoxBrush2.TabIndex = 4;
-            this.toolTip.SetToolTip(this.textBoxBrush2, "A brush in bundle 2.");
+            this.toolTip.SetToolTip(this.textBoxBrush2, "Specify brush in Database 2.");
             // 
             // buttonBrowseBrush2
             // 
@@ -438,7 +440,7 @@
             this.buttonBrowseBrush2.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowseBrush2.TabIndex = 5;
             this.buttonBrowseBrush2.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonBrowseBrush2, "Browse the brushes in bundle 2.");
+            this.toolTip.SetToolTip(this.buttonBrowseBrush2, "Browse for brush in Database 2.");
             this.buttonBrowseBrush2.UseVisualStyleBackColor = false;
             this.buttonBrowseBrush2.Click += new System.EventHandler(this.OnBrowseBrush2Click);
             // 
@@ -454,7 +456,7 @@
             this.labelBrush2.TabIndex = 3;
             this.labelBrush2.Text = "Brush 2:";
             this.labelBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelBrush2, "A brush in bundle 2.");
+            this.toolTip.SetToolTip(this.labelBrush2, "Specify brush in Database 2.");
             // 
             // flowLayoutPanelBrush2
             // 
@@ -476,9 +478,10 @@
             this.radioButtonVariant2.Name = "radioButtonVariant2";
             this.radioButtonVariant2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.radioButtonVariant2.Size = new System.Drawing.Size(254, 36);
-            this.radioButtonVariant2.TabIndex = 1;
+            this.radioButtonVariant2.TabIndex = 0;
             this.radioButtonVariant2.TabStop = true;
             this.radioButtonVariant2.Text = "NodeVariantId";
+            this.toolTip.SetToolTip(this.radioButtonVariant2, "Use NodeVariantId for current and NodeInitVariant for default.");
             this.radioButtonVariant2.UseVisualStyleBackColor = true;
             // 
             // radioButtonInitVariant2
@@ -489,8 +492,9 @@
             this.radioButtonInitVariant2.Name = "radioButtonInitVariant2";
             this.radioButtonInitVariant2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.radioButtonInitVariant2.Size = new System.Drawing.Size(299, 36);
-            this.radioButtonInitVariant2.TabIndex = 2;
+            this.radioButtonInitVariant2.TabIndex = 1;
             this.radioButtonInitVariant2.Text = "NodeIInitVariantId";
+            this.toolTip.SetToolTip(this.radioButtonInitVariant2, "Use NodeVariantId for current and NodeInitVariant for default.");
             this.radioButtonInitVariant2.UseVisualStyleBackColor = true;
             // 
             // textBoxInfo
@@ -501,7 +505,7 @@
             this.textBoxInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxInfo.Name = "textBoxInfo";
             this.textBoxInfo.Size = new System.Drawing.Size(1534, 659);
-            this.textBoxInfo.TabIndex = 4;
+            this.textBoxInfo.TabIndex = 2;
             this.textBoxInfo.Text = "";
             // 
             // flowLayoutPanelButtons
@@ -530,9 +534,9 @@
             this.buttonProcess1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonProcess1.Name = "buttonProcess1";
             this.buttonProcess1.Size = new System.Drawing.Size(231, 42);
-            this.buttonProcess1.TabIndex = 0;
+            this.buttonProcess1.TabIndex = 1;
             this.buttonProcess1.Text = "Process Brush 1";
-            this.toolTip.SetToolTip(this.buttonProcess1, "Process Brush 1");
+            this.toolTip.SetToolTip(this.buttonProcess1, "Process Brush 1.");
             this.buttonProcess1.UseVisualStyleBackColor = true;
             this.buttonProcess1.Click += new System.EventHandler(this.OnProcess1Click);
             // 
@@ -545,7 +549,7 @@
             this.buttonProcess2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonProcess2.Name = "buttonProcess2";
             this.buttonProcess2.Size = new System.Drawing.Size(231, 42);
-            this.buttonProcess2.TabIndex = 1;
+            this.buttonProcess2.TabIndex = 2;
             this.buttonProcess2.Text = "Process Brush 2";
             this.toolTip.SetToolTip(this.buttonProcess2, "Process brush 2.");
             this.buttonProcess2.UseVisualStyleBackColor = true;
@@ -560,7 +564,7 @@
             this.buttonCompare.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCompare.Name = "buttonCompare";
             this.buttonCompare.Size = new System.Drawing.Size(141, 42);
-            this.buttonCompare.TabIndex = 2;
+            this.buttonCompare.TabIndex = 3;
             this.buttonCompare.Text = "Compare";
             this.toolTip.SetToolTip(this.buttonCompare, "Compare the brushes, listing differences.");
             this.buttonCompare.UseVisualStyleBackColor = true;
@@ -575,7 +579,7 @@
             this.buttonQuit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(78, 42);
-            this.buttonQuit.TabIndex = 3;
+            this.buttonQuit.TabIndex = 0;
             this.buttonQuit.Text = "Quit";
             this.toolTip.SetToolTip(this.buttonQuit, "Quit the application.");
             this.buttonQuit.UseVisualStyleBackColor = true;
