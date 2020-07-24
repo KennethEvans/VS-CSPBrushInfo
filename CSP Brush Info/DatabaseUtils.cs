@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CSPBrushInfo {
@@ -81,12 +82,11 @@ namespace CSPBrushInfo {
 
             // Loop over the elements finding the top one (name is blank)
             // Then trace the first and next values for the groups and subtools
+            // For each one found, set the nodeParentUUid.
             sb.AppendLine();
             Tool firstChild, firstChild1, firstChild2;
             int nTools = 0, nGroups = 0, nSubTools = 0;
             // Use this to sort the Dictionary (doesn't matter here)
-            //foreach (KeyValuePair<string, Tool> entry in
-            //    map.OrderBy(entry => entry.Value.nodeName)) {
             foreach (KeyValuePair<string, Tool> entry in map) {
                 tool = entry.Value;
                 // Only process the top level which has a blank name and _PW_ID=1
@@ -99,24 +99,18 @@ namespace CSPBrushInfo {
                     continue;
                 }
                 map.TryGetValue(nodeFirstChildUuid, out firstChild);
-                if (firstChild.nodeFirstChildUuid == null
-                    || firstChild.nodeUuid.Length != 32) {
-                    continue;
-                }
                 // Get the tools
                 while (firstChild != null
-                    && firstChild.nodeNextUuid.Length == 32) {
+                    && firstChild.nodeUuid.Length == 32) {
                     // sb.AppendLine("Tool: " + firstChild.nodeName
                     // + " nodeUuid=" + firstChild.nodeUuid
                     // + " nodeFirstChildUuid=" + firstChild.nodeFirstChildUuid);
                     nTools++;
                     sb.AppendLine("Tool: " + firstChild.nodeName);
+                    firstChild.nodeParentUuid = tool.nodeUuid;
 
                     map.TryGetValue(firstChild.nodeFirstChildUuid, out firstChild1);
-                    if (firstChild1 == null || firstChild1.nodeFirstChildUuid == null
-                        || firstChild1.nodeFirstChildUuid.Length != 32) {
-                        continue;
-                    }
+                    // Get the groups
                     while (firstChild1 != null
                         && firstChild1.nodeUuid.Length == 32) {
                         // sb.AppendLine(
@@ -125,12 +119,10 @@ namespace CSPBrushInfo {
                         // + firstChild1.nodeFirstChildUuid);
                         nGroups++;
                         sb.AppendLine(TAB + "Group: " + firstChild1.nodeName);
+                        firstChild1.nodeParentUuid = firstChild.nodeUuid;
 
                         // Get the sub tools
                         map.TryGetValue(firstChild1.nodeFirstChildUuid, out firstChild2);
-                        if (firstChild2 == null) {
-                            continue;
-                        }
                         while (firstChild2 != null
                             && firstChild2.nodeUuid.Length == 32) {
                             // sb.AppendLine(TAB + TAB + "SubTool: "
@@ -140,20 +132,73 @@ namespace CSPBrushInfo {
                             nSubTools++;
                             sb.AppendLine(
                                 TAB + TAB + "SubTool: " + firstChild2.nodeName);
+                            firstChild2.nodeParentUuid = firstChild1.nodeUuid;
+                            // Get the next subtool item
                             map.TryGetValue(firstChild2.nodeNextUuid, out firstChild2);
                         }
-
+                        // Get the next group item
                         map.TryGetValue(firstChild1.nodeNextUuid, out firstChild1);
                     }
+                    // Get the next tool item
                     map.TryGetValue(firstChild.nodeNextUuid, out firstChild);
                 }
             }
-            sb.AppendLine(NL + "nTools=" + nTools + " nGroups=" + nGroups
+            sb.AppendLine("nTools=" + nTools + " nGroups=" + nGroups
                 + " nSubTools=" + nSubTools);
+
+            // Check for orphans
+            sb.AppendLine(NL + "Orphans");
+            int nOrphans = 0;
+            foreach (KeyValuePair<string, Tool> entry in
+                map.OrderBy(entry => entry.Value.nodeName)) {
+                tool = entry.Value;
+                // Don't do the root
+                if (tool.nodeName.Length == 0) continue;
+                if (tool.nodeParentUuid == null || tool.nodeParentUuid.Length != 32) {
+                    nOrphans++;
+                    sb.AppendLine(
+                        TAB + tool.nodeName + " _PW_ID(Node)=" + tool.id +
+                        " nodeVariantId=" + tool.nodeVariantID);
+                }
+            }
+            sb.AppendLine("nOrphans=" + nOrphans);
+
+            // Check for duplicate brush names
+            sb.AppendLine(NL + "Duplicate Brush Names");
+            int nDuplicates = 0;
+            Tool prev = null;
+            bool first = true;
+            foreach (KeyValuePair<string, Tool> entry in
+                map.OrderBy(entry => entry.Value.nodeName)) {
+                tool = entry.Value;
+                // If nodeVariantID = 0, it's not a brush
+                if (tool.nodeVariantID == 0) continue;
+                // Can't have a duplicate for the first item
+                if (prev == null) {
+                    prev = tool;
+                    continue;
+                }
+                if (tool.nodeName.Equals(prev.nodeName)) {
+                    if (first) {
+                        // Indicates the number of duplicate sets
+                        nDuplicates++;
+                        sb.AppendLine(
+                            TAB + prev.nodeName + " _PW_ID(Node)=" + prev.id +
+                        " nodeVariantId=" + prev.nodeVariantID);
+                        first = false;
+                    }
+                    sb.AppendLine(
+                       TAB + tool.nodeName + " _PW_ID(Node) =" + tool.id +
+                        " nodeVariantId=" + tool.nodeVariantID);
+                    first = true;
+                }
+                prev = tool;
+            }
+
+            sb.AppendLine("nDuplicates=" + nDuplicates);
 
             return sb.ToString();
         }
-
     }
 
     public class Tool {
@@ -164,6 +209,8 @@ namespace CSPBrushInfo {
         public String nodeFirstChildUuid;
         public String nodeNextUuid;
         public String nodeSelectedUuid;
+        // This is not a database column but is used for tracking orphans
+        public String nodeParentUuid;
 
         public Tool(long id, long nodeVariantID, String nodeName, String nodeUuid,
             String nodeFirstChildUuid, String nodeNextUuid,

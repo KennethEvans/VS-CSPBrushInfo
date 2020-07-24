@@ -62,20 +62,20 @@
             this.radioButtonVariant2 = new System.Windows.Forms.RadioButton();
             this.radioButtonInitVariant2 = new System.Windows.Forms.RadioButton();
             this.textBoxInfo = new System.Windows.Forms.RichTextBox();
-            this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonProcess1 = new System.Windows.Forms.Button();
-            this.buttonProcess2 = new System.Windows.Forms.Button();
-            this.buttonCompare = new System.Windows.Forms.Button();
-            this.buttonQuit = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveAsRTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonProcess1 = new System.Windows.Forms.Button();
+            this.buttonProcess2 = new System.Windows.Forms.Button();
+            this.buttonCompare = new System.Windows.Forms.Button();
+            this.buttonQuit = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanelTop.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBoxBrush1.SuspendLayout();
@@ -86,8 +86,8 @@
             this.tableLayoutPanelGroupBrush2.SuspendLayout();
             this.tableLayoutPanelDatabase2.SuspendLayout();
             this.flowLayoutPanelBrush2.SuspendLayout();
-            this.flowLayoutPanelButtons.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.flowLayoutPanelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -572,6 +572,65 @@
             this.textBoxInfo.TabIndex = 3;
             this.textBoxInfo.Text = "";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cutToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.selectAllToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.saveAsRTFToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(271, 246);
+            // 
+            // cutToolStripMenuItem
+            // 
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
+            this.cutToolStripMenuItem.Text = "Cut";
+            this.cutToolStripMenuItem.Click += new System.EventHandler(this.OnCutClick);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.OnCopyClick);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.OnPasteClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(267, 6);
+            // 
+            // selectAllToolStripMenuItem
+            // 
+            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
+            this.selectAllToolStripMenuItem.Text = "Select All";
+            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.OnSelectAllClick);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(267, 6);
+            // 
+            // saveAsRTFToolStripMenuItem
+            // 
+            this.saveAsRTFToolStripMenuItem.Name = "saveAsRTFToolStripMenuItem";
+            this.saveAsRTFToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
+            this.saveAsRTFToolStripMenuItem.Text = "Save as RTF...";
+            this.saveAsRTFToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRtfClick);
+            // 
             // flowLayoutPanelButtons
             // 
             this.flowLayoutPanelButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -649,65 +708,6 @@
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitClick);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cutToolStripMenuItem,
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.selectAllToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.saveAsRTFToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(271, 246);
-            // 
-            // cutToolStripMenuItem
-            // 
-            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
-            this.cutToolStripMenuItem.Text = "Cut";
-            this.cutToolStripMenuItem.Click += new System.EventHandler(this.OnCutClick);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.OnCopyClick);
-            // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
-            this.pasteToolStripMenuItem.Text = "Paste";
-            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.OnPasteClick);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(267, 6);
-            // 
-            // selectAllToolStripMenuItem
-            // 
-            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
-            this.selectAllToolStripMenuItem.Text = "Select All";
-            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.OnSelectAllClick);
-            // 
-            // saveAsRTFToolStripMenuItem
-            // 
-            this.saveAsRTFToolStripMenuItem.Name = "saveAsRTFToolStripMenuItem";
-            this.saveAsRTFToolStripMenuItem.Size = new System.Drawing.Size(270, 46);
-            this.saveAsRTFToolStripMenuItem.Text = "Save as RTF...";
-            this.saveAsRTFToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRtfClick);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(267, 6);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -739,9 +739,9 @@
             this.tableLayoutPanelDatabase2.PerformLayout();
             this.flowLayoutPanelBrush2.ResumeLayout(false);
             this.flowLayoutPanelBrush2.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.flowLayoutPanelButtons.ResumeLayout(false);
             this.flowLayoutPanelButtons.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
