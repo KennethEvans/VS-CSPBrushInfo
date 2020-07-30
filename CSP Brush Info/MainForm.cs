@@ -115,9 +115,10 @@ namespace CSPBrushInfo {
                     conn.Open();
                     SQLiteCommand command;
                     command = conn.CreateCommand();
+                    // Need to replace single quotes by double
                     command.CommandText = "SELECT NodeName, NodeVariantId, " +
                         "NodeInitVariantId FROM Node WHERE NodeName='"
-                        + brushName + "'";
+                        + brushName.Replace("'", "''") + "'";
                     List<NodeInfo> items = new List<NodeInfo>();
                     using (dataReader = command.ExecuteReader()) {
                         if (!dataReader.HasRows) {
