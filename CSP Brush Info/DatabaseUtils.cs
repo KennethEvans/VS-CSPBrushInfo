@@ -8,6 +8,22 @@ using System.Text;
 namespace CSPBrushInfo {
     class DatabaseUtils {
         public static readonly String NL = Environment.NewLine;
+        public static string networkString = "\\\\";
+
+        /// <summary>
+        /// Returns a name to use with new SQLiteConnection.
+        /// Appends \\ if it is a network name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string getSqliteOpenName (string name) {
+            if (name.StartsWith(networkString) &&
+                !name.StartsWith(networkString + networkString)) {
+                return networkString + name;
+            } else {
+                return name;
+            }
+        }
 
         public static string getToolHierarchy(string database) {
             string TAB = "   ";
@@ -42,7 +58,8 @@ namespace CSPBrushInfo {
             DateTime modTime = File.GetLastWriteTime(database);
             Tool tool;
             try {
-                using (conn = new SQLiteConnection("Data Source=" + database
+                string openName = DatabaseUtils.getSqliteOpenName(database);
+                using (conn = new SQLiteConnection("Data Source=" + openName
                     + ";Version=3;Read Only=True;")) {
                     conn.Open();
                     SQLiteCommand command;

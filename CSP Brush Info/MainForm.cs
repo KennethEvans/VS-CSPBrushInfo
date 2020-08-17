@@ -110,7 +110,8 @@ namespace CSPBrushInfo {
             info += "Modified: " + modTime + NL;
             // Find the node
             try {
-                using (conn = new SQLiteConnection("Data Source=" + name
+                string openName = DatabaseUtils.getSqliteOpenName(name);
+                using (conn = new SQLiteConnection("Data Source=" + openName
                     + ";Version=3;Read Only=True;")) {
                     conn.Open();
                     SQLiteCommand command;
@@ -213,7 +214,8 @@ namespace CSPBrushInfo {
             // Find the variant
             conn = null;
             try {
-                using (conn = new SQLiteConnection("Data Source=" + name
+                string openName = DatabaseUtils.getSqliteOpenName(name);
+                using (conn = new SQLiteConnection("Data Source=" + openName
                     + ";Version=3;Read Only=True;")) {
                     conn.Open();
                     SQLiteCommand command;
