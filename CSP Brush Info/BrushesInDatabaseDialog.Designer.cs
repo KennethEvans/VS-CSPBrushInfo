@@ -26,24 +26,24 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BrushesInDatabaseDialog));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelDatabase = new System.Windows.Forms.TableLayoutPanel();
+            this.labelDatabase = new System.Windows.Forms.Label();
+            this.textBoxDatabase = new System.Windows.Forms.TextBox();
+            this.buttonBrowse = new System.Windows.Forms.Button();
             this.tableLayoutPanelFilter = new System.Windows.Forms.TableLayoutPanel();
             this.labelFilter = new System.Windows.Forms.Label();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
+            this.checkBoxCaseSensitive = new System.Windows.Forms.CheckBox();
             this.listBoxBrushes = new System.Windows.Forms.ListBox();
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonFind = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxCaseSensitive = new System.Windows.Forms.CheckBox();
-            this.tableLayoutPanelDatabase = new System.Windows.Forms.TableLayoutPanel();
-            this.labelDatabase = new System.Windows.Forms.Label();
-            this.textBoxDatabase = new System.Windows.Forms.TextBox();
-            this.buttonBrowse = new System.Windows.Forms.Button();
             this.tableLayoutPanelTop.SuspendLayout();
+            this.tableLayoutPanelDatabase.SuspendLayout();
             this.tableLayoutPanelFilter.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
-            this.tableLayoutPanelDatabase.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -66,6 +66,64 @@
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.Size = new System.Drawing.Size(1062, 450);
             this.tableLayoutPanelTop.TabIndex = 0;
+            // 
+            // tableLayoutPanelDatabase
+            // 
+            this.tableLayoutPanelDatabase.AutoSize = true;
+            this.tableLayoutPanelDatabase.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanelDatabase.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanelDatabase.ColumnCount = 3;
+            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelDatabase.Controls.Add(this.labelDatabase, 0, 0);
+            this.tableLayoutPanelDatabase.Controls.Add(this.textBoxDatabase, 1, 0);
+            this.tableLayoutPanelDatabase.Controls.Add(this.buttonBrowse, 2, 0);
+            this.tableLayoutPanelDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelDatabase.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanelDatabase.Name = "tableLayoutPanelDatabase";
+            this.tableLayoutPanelDatabase.RowCount = 1;
+            this.tableLayoutPanelDatabase.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDatabase.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDatabase.Size = new System.Drawing.Size(1056, 48);
+            this.tableLayoutPanelDatabase.TabIndex = 2;
+            // 
+            // labelDatabase
+            // 
+            this.labelDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelDatabase.AutoSize = true;
+            this.labelDatabase.BackColor = System.Drawing.SystemColors.Control;
+            this.labelDatabase.Location = new System.Drawing.Point(3, 0);
+            this.labelDatabase.Name = "labelDatabase";
+            this.labelDatabase.Size = new System.Drawing.Size(145, 48);
+            this.labelDatabase.TabIndex = 0;
+            this.labelDatabase.Text = "Database:";
+            this.labelDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelDatabase, "Specify database or SUT file.");
+            // 
+            // textBoxDatabase
+            // 
+            this.textBoxDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxDatabase.Location = new System.Drawing.Point(154, 3);
+            this.textBoxDatabase.Name = "textBoxDatabase";
+            this.textBoxDatabase.Size = new System.Drawing.Size(774, 38);
+            this.textBoxDatabase.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxDatabase, "Specify database or SUT file.");
+            // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.buttonBrowse.AutoSize = true;
+            this.buttonBrowse.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonBrowse.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonBrowse.Location = new System.Drawing.Point(934, 3);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(119, 42);
+            this.buttonBrowse.TabIndex = 2;
+            this.buttonBrowse.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrowse, "Browse for a database or SUT file.");
+            this.buttonBrowse.UseVisualStyleBackColor = false;
             // 
             // tableLayoutPanelFilter
             // 
@@ -112,6 +170,17 @@
             this.textBoxFilter.TabIndex = 1;
             this.toolTip.SetToolTip(this.textBoxFilter, "Filter the brushes.\r\nCR to execute.\r\nClear text, then CR to stop filtering.");
             this.textBoxFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.onTextBoxFilterKeyDown);
+            // 
+            // checkBoxCaseSensitive
+            // 
+            this.checkBoxCaseSensitive.AutoSize = true;
+            this.checkBoxCaseSensitive.Location = new System.Drawing.Point(810, 3);
+            this.checkBoxCaseSensitive.Name = "checkBoxCaseSensitive";
+            this.checkBoxCaseSensitive.Size = new System.Drawing.Size(243, 36);
+            this.checkBoxCaseSensitive.TabIndex = 2;
+            this.checkBoxCaseSensitive.Text = "Case Sensitive";
+            this.toolTip.SetToolTip(this.checkBoxCaseSensitive, "Check to make filter case sensitive.");
+            this.checkBoxCaseSensitive.UseVisualStyleBackColor = true;
             // 
             // listBoxBrushes
             // 
@@ -181,75 +250,6 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
             // 
-            // checkBoxCaseSensitive
-            // 
-            this.checkBoxCaseSensitive.AutoSize = true;
-            this.checkBoxCaseSensitive.Location = new System.Drawing.Point(810, 3);
-            this.checkBoxCaseSensitive.Name = "checkBoxCaseSensitive";
-            this.checkBoxCaseSensitive.Size = new System.Drawing.Size(243, 36);
-            this.checkBoxCaseSensitive.TabIndex = 2;
-            this.checkBoxCaseSensitive.Text = "Case Sensitive";
-            this.toolTip.SetToolTip(this.checkBoxCaseSensitive, "Check to make filter case sensitive.");
-            this.checkBoxCaseSensitive.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanelDatabase
-            // 
-            this.tableLayoutPanelDatabase.AutoSize = true;
-            this.tableLayoutPanelDatabase.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanelDatabase.BackColor = System.Drawing.SystemColors.Control;
-            this.tableLayoutPanelDatabase.ColumnCount = 3;
-            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelDatabase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanelDatabase.Controls.Add(this.labelDatabase, 0, 0);
-            this.tableLayoutPanelDatabase.Controls.Add(this.textBoxDatabase, 1, 0);
-            this.tableLayoutPanelDatabase.Controls.Add(this.buttonBrowse, 2, 0);
-            this.tableLayoutPanelDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelDatabase.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanelDatabase.Name = "tableLayoutPanelDatabase";
-            this.tableLayoutPanelDatabase.RowCount = 1;
-            this.tableLayoutPanelDatabase.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelDatabase.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelDatabase.Size = new System.Drawing.Size(1056, 48);
-            this.tableLayoutPanelDatabase.TabIndex = 2;
-            // 
-            // labelDatabase
-            // 
-            this.labelDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelDatabase.AutoSize = true;
-            this.labelDatabase.BackColor = System.Drawing.SystemColors.Control;
-            this.labelDatabase.Location = new System.Drawing.Point(3, 0);
-            this.labelDatabase.Name = "labelDatabase";
-            this.labelDatabase.Size = new System.Drawing.Size(145, 48);
-            this.labelDatabase.TabIndex = 0;
-            this.labelDatabase.Text = "Database:";
-            this.labelDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelDatabase, "Specify database or SUT file.");
-            // 
-            // textBoxDatabase
-            // 
-            this.textBoxDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDatabase.Location = new System.Drawing.Point(154, 3);
-            this.textBoxDatabase.Name = "textBoxDatabase";
-            this.textBoxDatabase.Size = new System.Drawing.Size(774, 38);
-            this.textBoxDatabase.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textBoxDatabase, "Specify database or SUT file.");
-            // 
-            // buttonBrowse
-            // 
-            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.buttonBrowse.AutoSize = true;
-            this.buttonBrowse.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonBrowse.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonBrowse.Location = new System.Drawing.Point(934, 3);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(119, 42);
-            this.buttonBrowse.TabIndex = 2;
-            this.buttonBrowse.Text = "Browse";
-            this.toolTip.SetToolTip(this.buttonBrowse, "Browse for a database or SUT file.");
-            this.buttonBrowse.UseVisualStyleBackColor = false;
-            // 
             // BrushesInDatabaseDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -261,12 +261,12 @@
             this.Text = "Brushes in Database";
             this.tableLayoutPanelTop.ResumeLayout(false);
             this.tableLayoutPanelTop.PerformLayout();
+            this.tableLayoutPanelDatabase.ResumeLayout(false);
+            this.tableLayoutPanelDatabase.PerformLayout();
             this.tableLayoutPanelFilter.ResumeLayout(false);
             this.tableLayoutPanelFilter.PerformLayout();
             this.flowLayoutPanelButtons.ResumeLayout(false);
             this.flowLayoutPanelButtons.PerformLayout();
-            this.tableLayoutPanelDatabase.ResumeLayout(false);
-            this.tableLayoutPanelDatabase.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
