@@ -46,10 +46,19 @@ namespace CSPBrushInfo {
             if (String.IsNullOrEmpty(filter)) {
                 return items;
             }
+            bool caseSensitive = checkBoxCaseSensitive.Checked;
+            if (!caseSensitive) filter = filter.ToLower();
             List<String> filteredItems = new List<String>();
             foreach (string item in items) {
-                if (item.Contains(filter)) {
-                    filteredItems.Add(item);
+                if (caseSensitive) {
+                    if (item.Contains(filter)) {
+                        filteredItems.Add(item);
+                    }
+                } else {
+                    if (item.ToLower().Contains(filter)) {
+                        filteredItems.Add(item);
+                    }
+
                 }
             }
             return filteredItems;
