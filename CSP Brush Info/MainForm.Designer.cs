@@ -117,13 +117,14 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1588, 49);
+            this.menuStrip1.Size = new System.Drawing.Size(1588, 60);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -135,7 +136,7 @@
             this.saveInfoAsRTFToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 45);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 50);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // showToolHierarchyToolStripMenuItem
@@ -186,20 +187,20 @@
             this.overviewToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(104, 45);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(104, 50);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // overviewToolStripMenuItem
             // 
             this.overviewToolStripMenuItem.Name = "overviewToolStripMenuItem";
-            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
+            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.overviewToolStripMenuItem.Text = "Overview...";
             this.overviewToolStripMenuItem.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OnAboutClick);
             // 
@@ -210,7 +211,7 @@
             this.groupBoxBrush1.BackColor = System.Drawing.SystemColors.Control;
             this.groupBoxBrush1.Controls.Add(this.tableLayoutPanelGroupBrush1);
             this.groupBoxBrush1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxBrush1.Location = new System.Drawing.Point(5, 59);
+            this.groupBoxBrush1.Location = new System.Drawing.Point(5, 70);
             this.groupBoxBrush1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.groupBoxBrush1.Name = "groupBoxBrush1";
             this.groupBoxBrush1.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
@@ -390,7 +391,7 @@
             this.groupBoxBrush2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxBrush2.Controls.Add(this.tableLayoutPanelGroupBrush2);
             this.groupBoxBrush2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxBrush2.Location = new System.Drawing.Point(5, 258);
+            this.groupBoxBrush2.Location = new System.Drawing.Point(5, 269);
             this.groupBoxBrush2.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.groupBoxBrush2.Name = "groupBoxBrush2";
             this.groupBoxBrush2.Padding = new System.Windows.Forms.Padding(10, 2, 3, 2);
@@ -565,10 +566,10 @@
             // 
             this.textBoxInfo.ContextMenuStrip = this.contextMenuStrip1;
             this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfo.Location = new System.Drawing.Point(3, 449);
+            this.textBoxInfo.Location = new System.Drawing.Point(3, 460);
             this.textBoxInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxInfo.Name = "textBoxInfo";
-            this.textBoxInfo.Size = new System.Drawing.Size(1582, 761);
+            this.textBoxInfo.Size = new System.Drawing.Size(1582, 750);
             this.textBoxInfo.TabIndex = 3;
             this.textBoxInfo.Text = "";
             // 
