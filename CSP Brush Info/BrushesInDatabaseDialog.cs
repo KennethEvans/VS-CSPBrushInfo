@@ -148,7 +148,7 @@ namespace CSPBrushInfo {
                 // Keep it from dinging because is is not multi-line
                 e.SuppressKeyPress = true;
                 List<String> filteredItems = getFilteredItems();
-                if (filteredItems != null) { }
+                if (filteredItems == null) { return; }
                 listBoxBrushes.DataSource = filteredItems;
                 // Select the original item
                 if (!String.IsNullOrEmpty(origName)) {
@@ -158,6 +158,11 @@ namespace CSPBrushInfo {
                     }
                 }
             }
+        }
+
+        private void onListBoxBrushesDoubleClick(object sender, EventArgs e) {
+            // Just call onOkClick. Arguments aren't used.
+            OnOkClick(null, null);
         }
     }
 }

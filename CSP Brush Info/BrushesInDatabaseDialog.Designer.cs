@@ -124,6 +124,7 @@
             this.buttonBrowse.Text = "Browse";
             this.toolTip.SetToolTip(this.buttonBrowse, "Browse for a database or SUT file.");
             this.buttonBrowse.UseVisualStyleBackColor = false;
+            this.buttonBrowse.Click += new System.EventHandler(this.OnBrowseClick);
             // 
             // tableLayoutPanelFilter
             // 
@@ -192,6 +193,7 @@
             this.listBoxBrushes.Size = new System.Drawing.Size(1056, 286);
             this.listBoxBrushes.TabIndex = 1;
             this.toolTip.SetToolTip(this.listBoxBrushes, "Available brush names.");
+            this.listBoxBrushes.DoubleClick += new System.EventHandler(this.onListBoxBrushesDoubleClick);
             // 
             // flowLayoutPanelButtons
             // 

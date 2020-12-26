@@ -136,7 +136,7 @@
             this.saveInfoAsRTFToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 50);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 56);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // showToolHierarchyToolStripMenuItem
@@ -187,20 +187,20 @@
             this.overviewToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(104, 50);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(104, 56);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // overviewToolStripMenuItem
             // 
             this.overviewToolStripMenuItem.Name = "overviewToolStripMenuItem";
-            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
+            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
             this.overviewToolStripMenuItem.Text = "Overview...";
             this.overviewToolStripMenuItem.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OnAboutClick);
             // 
