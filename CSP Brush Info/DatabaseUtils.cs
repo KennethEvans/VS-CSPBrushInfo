@@ -16,7 +16,7 @@ namespace CSPBrushInfo {
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string getSqliteOpenName (string name) {
+        public static string getSqliteOpenName(string name) {
             if (name.StartsWith(networkString) &&
                 !name.StartsWith(networkString + networkString)) {
                 return networkString + name;
@@ -64,24 +64,26 @@ namespace CSPBrushInfo {
                     conn.Open();
                     SQLiteCommand command;
                     command = conn.CreateCommand();
-                    command.CommandText = "SELECT _PW_ID, NodeVariantID, NodeName," +
+                    command.CommandText = "SELECT _PW_ID," +
+                        " NodeVariantID," + "NodeInitVariantId," + " NodeName," +
                         " hex(NodeUUid), hex(NodeFirstChildUuid)," +
                         " hex(NodeNextUuid), hex(NodeSelectedUuid)" +
                         " FROM Node";
-                    long id, nodeVariantID;
+                    long id, nodeVariantID, nodeInitVariantID;
                     string nodeName;
                     string nodeUuid, nodeFirstChildUuid, nodeNextUuid, nodeSelectedUuid;
                     using (dataReader = command.ExecuteReader()) {
                         while (dataReader.Read()) {
                             id = dataReader.GetInt64(0);
                             nodeVariantID = dataReader.GetInt64(1);
-                            nodeName = dataReader.GetString(2);
-                            nodeUuid = dataReader.GetString(3);
-                            nodeFirstChildUuid = dataReader.GetString(4);
-                            nodeNextUuid = dataReader.GetString(5);
-                            nodeSelectedUuid = dataReader.GetString(6);
-                            tool = new Tool(id, nodeVariantID, nodeName,
-                                nodeUuid, nodeFirstChildUuid,
+                            nodeInitVariantID = dataReader.GetInt64(2);
+                            nodeName = dataReader.GetString(3);
+                            nodeUuid = dataReader.GetString(4);
+                            nodeFirstChildUuid = dataReader.GetString(5);
+                            nodeNextUuid = dataReader.GetString(6);
+                            nodeSelectedUuid = dataReader.GetString(7);
+                            tool = new Tool(id, nodeVariantID, nodeInitVariantID,
+                                nodeName, nodeUuid, nodeFirstChildUuid,
                                 nodeNextUuid, nodeSelectedUuid);
                             map.Add(nodeUuid, tool);
                         }
@@ -200,13 +202,16 @@ namespace CSPBrushInfo {
                         // Indicates the number of duplicate sets
                         nDuplicates++;
                         sb.AppendLine(
-                            TAB + prev.nodeName + " _PW_ID(Node)=" + prev.id +
-                        " nodeVariantId=" + prev.nodeVariantID);
+                            TAB + prev.nodeName
+                            + " _PW_ID(Node)=" + prev.id
+                            + " nodeVariantID=" + prev.nodeVariantID
+                            + " nodeInitVariantID=" + prev.nodeInitVariantID);
                         first = false;
                     }
                     sb.AppendLine(
                        TAB + tool.nodeName + " _PW_ID(Node) =" + tool.id +
-                        " nodeVariantId=" + tool.nodeVariantID);
+                        " nodeVariantID=" + tool.nodeVariantID
+                        + " nodeInitVariantID=" + tool.nodeInitVariantID);
                     first = true;
                 }
                 prev = tool;
@@ -221,6 +226,7 @@ namespace CSPBrushInfo {
     public class Tool {
         public long id;
         public long nodeVariantID;
+        public long nodeInitVariantID;
         public String nodeName;
         public String nodeUuid;
         public String nodeFirstChildUuid;
@@ -229,11 +235,13 @@ namespace CSPBrushInfo {
         // This is not a database column but is used for tracking orphans
         public String nodeParentUuid;
 
-        public Tool(long id, long nodeVariantID, String nodeName, String nodeUuid,
+        public Tool(long id, long nodeVariantID, long nodeInitVariantID,
+            String nodeName, String nodeUuid,
             String nodeFirstChildUuid, String nodeNextUuid,
             String nodeSelectedUuid) {
             this.id = id;
             this.nodeVariantID = nodeVariantID;
+            this.nodeInitVariantID = nodeInitVariantID;
             this.nodeName = nodeName;
             this.nodeUuid = nodeUuid;
             this.nodeFirstChildUuid = nodeFirstChildUuid;
