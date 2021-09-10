@@ -69,7 +69,7 @@ namespace CSPBrushInfo {
             if (name.ToLower().Contains("effector")) {
                 // Effectors
                 info = interpretEffector(bytes, tab);
-            } else if (name.Contains("BrushPatternImageArray")) {
+            } else if (name.Contains("PatternImageArray")) {
                 info = interpretImage(bytes, tab);
             } else if (name.Contains("TextureImage")) {
                 info = interpretImage(bytes, tab);
