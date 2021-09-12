@@ -83,6 +83,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -99,6 +100,12 @@
     </Compile>
     <Compile Include="CSPBrushParam.cs" />
     <Compile Include="DatabaseUtils.cs" />
+    <Compile Include="FindDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindDialog.Designer.cs">
+      <DependentUpon>FindDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="HexDump.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -121,11 +128,11 @@
     <Compile Include="ScrolledHTMLDialog.designer.cs">
       <DependentUpon>ScrolledHTMLDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScrolledTextDialog.cs">
+    <Compile Include="ScrolledRichTextDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ScrolledTextDialog.designer.cs">
-      <DependentUpon>ScrolledTextDialog.cs</DependentUpon>
+    <Compile Include="ScrolledRichTextDialog.designer.cs">
+      <DependentUpon>ScrolledRichTextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="AboutBox.resx">
@@ -133,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BrushesInDatabaseDialog.resx">
       <DependentUpon>BrushesInDatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FindDialog.resx">
+      <DependentUpon>FindDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -153,8 +163,8 @@
     <EmbeddedResource Include="ScrolledHTMLDialog.resx">
       <DependentUpon>ScrolledHTMLDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ScrolledTextDialog.resx">
-      <DependentUpon>ScrolledTextDialog.cs</DependentUpon>
+    <EmbeddedResource Include="ScrolledRichTextDialog.resx">
+      <DependentUpon>ScrolledRichTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.manifest" />
     <None Include="LICENSE">

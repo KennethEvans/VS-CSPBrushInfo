@@ -16,7 +16,8 @@ namespace CSPBrushInfo {
         public static readonly int PROCESS_TIMEOUT = 5000; // ms
         public static readonly String NL = Environment.NewLine;
         private static ScrolledHTMLDialog overviewDlg;
-        private static ScrolledTextDialog textDlg;
+        private static ScrolledRichTextDialog textDlg;
+        private static FindDialog findDlg;
 
         private List<CSPBrushParam> params1 = new List<CSPBrushParam>();
         private List<CSPBrushParam> params2 = new List<CSPBrushParam>();
@@ -613,6 +614,20 @@ namespace CSPBrushInfo {
             }
         }
 
+        private void OnFindClick(object sender, EventArgs e) {
+            if (textBoxInfo == null) {
+                return;
+            }
+            if (findDlg == null) {
+                findDlg = new FindDialog(textBoxInfo);
+                // Keep it on top
+                findDlg.Owner = this;
+                findDlg.Show();
+            } else {
+                findDlg.Visible = true;
+            }
+        }
+
         private void OnShowToolHierarchy(object sender, EventArgs e) {
             string label = sender.ToString();
             string database;
@@ -625,7 +640,7 @@ namespace CSPBrushInfo {
             // Create, show, or set visible the overview dialog as appropriate
             if (textDlg == null) {
                 MainForm app = (MainForm)FindForm().FindForm();
-                textDlg = new ScrolledTextDialog(
+                textDlg = new ScrolledRichTextDialog(
                     Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)),
                     info);
                 textDlg.Text = "Tool Hierarchy";
