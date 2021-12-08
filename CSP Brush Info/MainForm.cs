@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using About;
+using CSPUtils;
 
 namespace CSPBrushInfo {
 
