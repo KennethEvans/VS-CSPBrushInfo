@@ -24,11 +24,11 @@ namespace CSPUtils {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColorSetForm));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showVerboseOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.overviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,7 +37,8 @@ namespace CSPUtils {
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
-            this.showStatusOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanelTop.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
@@ -68,7 +69,6 @@ namespace CSPUtils {
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -83,9 +83,9 @@ namespace CSPUtils {
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openMenuItem,
-            this.showVerboseOutputToolStripMenuItem,
-            this.showStatusOutputToolStripMenuItem,
-            this.quitToolStripMenuItem});
+            this.toolStripSeparator2,
+            this.quitToolStripMenuItem,
+            this.toolStripSeparator1});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 48);
             this.fileToolStripMenuItem.Text = "File";
@@ -93,21 +93,14 @@ namespace CSPUtils {
             // openMenuItem
             // 
             this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.Size = new System.Drawing.Size(497, 54);
+            this.openMenuItem.Size = new System.Drawing.Size(448, 54);
             this.openMenuItem.Text = "Open";
             this.openMenuItem.Click += new System.EventHandler(this.OnOpenClick);
-            // 
-            // showVerboseOutputToolStripMenuItem
-            // 
-            this.showVerboseOutputToolStripMenuItem.Name = "showVerboseOutputToolStripMenuItem";
-            this.showVerboseOutputToolStripMenuItem.Size = new System.Drawing.Size(497, 54);
-            this.showVerboseOutputToolStripMenuItem.Text = "Show Verbose Output...";
-            this.showVerboseOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowVerboseClick);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(497, 54);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.OnQuitClick);
             // 
@@ -123,14 +116,15 @@ namespace CSPUtils {
             // overviewToolStripMenuItem
             // 
             this.overviewToolStripMenuItem.Name = "overviewToolStripMenuItem";
-            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
+            this.overviewToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.overviewToolStripMenuItem.Text = "Overview...";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(327, 54);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.aboutToolStripMenuItem.Text = "About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OnAboutClick);
             // 
             // textBoxInfo
             // 
@@ -185,12 +179,15 @@ namespace CSPUtils {
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitClick);
             // 
-            // showStatusOutputToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.showStatusOutputToolStripMenuItem.Name = "showStatusOutputToolStripMenuItem";
-            this.showStatusOutputToolStripMenuItem.Size = new System.Drawing.Size(497, 54);
-            this.showStatusOutputToolStripMenuItem.Text = "Show Status Output...";
-            this.showStatusOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowStatusClick);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(445, 6);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(445, 6);
             // 
             // ColorSetForm
             // 
@@ -198,6 +195,7 @@ namespace CSPUtils {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1341, 846);
             this.Controls.Add(this.tableLayoutPanelTop);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ColorSetForm";
             this.Text = "Color Set Analyzer";
             this.tableLayoutPanelTop.ResumeLayout(false);
@@ -225,8 +223,8 @@ namespace CSPUtils {
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelButtons;
         private System.Windows.Forms.Button buttonQuit;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ToolStripMenuItem showVerboseOutputToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showStatusOutputToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 

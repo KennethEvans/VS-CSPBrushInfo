@@ -11,6 +11,10 @@ namespace Utils {
     /// Based on code from https://www.codeproject.com/Articles/4544/Insert-Plain-Text-and-Images-into-RichTextBox-at-R
     /// </summary>
     public static class RTFUtils {
+        // KE: Added this and used it in getRtfImage
+        [DllImport("gdi32.dll")]
+        static extern bool DeleteEnhMetaFile(IntPtr hemf);
+
         /* RTF HEADER
 		 * ----------
 		 * 
@@ -305,6 +309,9 @@ namespace Utils {
                 // buffer an returns the number of bits in the WMF.  
                 uint convertedSize = GdipEmfToWmfBits(hEmf, bufferSize, buffer, MM_ANISOTROPIC,
                     EmfToWmfBitsFlags.EmfToWmfBitsFlagsDefault);
+
+                // KE
+                DeleteEnhMetaFile(hEmf);
 
                 // Append the bits to the RTF string
                 for (int i = 0; i < buffer.Length; ++i) {

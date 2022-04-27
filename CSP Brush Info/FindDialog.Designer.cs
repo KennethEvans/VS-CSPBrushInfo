@@ -24,23 +24,24 @@ namespace CSPUtils {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FindDialog));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSearch = new System.Windows.Forms.TableLayoutPanel();
             this.labelText = new System.Windows.Forms.Label();
             this.textBoxSearchString = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanelOptions = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBoxCaseSensitive = new System.Windows.Forms.CheckBox();
+            this.checkBoxWholeWord = new System.Windows.Forms.CheckBox();
+            this.checkBoxReverse = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonFind = new System.Windows.Forms.Button();
             this.buttonFindAll = new System.Windows.Forms.Button();
             this.buttonClearSelection = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.tableLayoutPanelOptions = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxCaseSensitive = new System.Windows.Forms.CheckBox();
-            this.checkBoxWholeWord = new System.Windows.Forms.CheckBox();
-            this.checkBoxReverse = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelSearch.SuspendLayout();
-            this.flowLayoutPanelButtons.SuspendLayout();
             this.tableLayoutPanelOptions.SuspendLayout();
+            this.flowLayoutPanelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -103,6 +104,55 @@ namespace CSPUtils {
             this.textBoxSearchString.Name = "textBoxSearchString";
             this.textBoxSearchString.Size = new System.Drawing.Size(704, 38);
             this.textBoxSearchString.TabIndex = 1;
+            // 
+            // tableLayoutPanelOptions
+            // 
+            this.tableLayoutPanelOptions.AutoSize = true;
+            this.tableLayoutPanelOptions.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanelOptions.ColumnCount = 1;
+            this.tableLayoutPanelOptions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxCaseSensitive, 0, 0);
+            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxWholeWord, 0, 1);
+            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxReverse, 0, 2);
+            this.tableLayoutPanelOptions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelOptions.Location = new System.Drawing.Point(3, 53);
+            this.tableLayoutPanelOptions.Name = "tableLayoutPanelOptions";
+            this.tableLayoutPanelOptions.RowCount = 3;
+            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelOptions.Size = new System.Drawing.Size(794, 138);
+            this.tableLayoutPanelOptions.TabIndex = 5;
+            // 
+            // checkBoxCaseSensitive
+            // 
+            this.checkBoxCaseSensitive.AutoSize = true;
+            this.checkBoxCaseSensitive.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxCaseSensitive.Name = "checkBoxCaseSensitive";
+            this.checkBoxCaseSensitive.Size = new System.Drawing.Size(243, 36);
+            this.checkBoxCaseSensitive.TabIndex = 3;
+            this.checkBoxCaseSensitive.Text = "Case Sensitive";
+            this.checkBoxCaseSensitive.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxWholeWord
+            // 
+            this.checkBoxWholeWord.AutoSize = true;
+            this.checkBoxWholeWord.Location = new System.Drawing.Point(3, 45);
+            this.checkBoxWholeWord.Name = "checkBoxWholeWord";
+            this.checkBoxWholeWord.Size = new System.Drawing.Size(208, 36);
+            this.checkBoxWholeWord.TabIndex = 4;
+            this.checkBoxWholeWord.Text = "Whole Word";
+            this.checkBoxWholeWord.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxReverse
+            // 
+            this.checkBoxReverse.AutoSize = true;
+            this.checkBoxReverse.Location = new System.Drawing.Point(3, 87);
+            this.checkBoxReverse.Name = "checkBoxReverse";
+            this.checkBoxReverse.Size = new System.Drawing.Size(158, 36);
+            this.checkBoxReverse.TabIndex = 5;
+            this.checkBoxReverse.Text = "Reverse";
+            this.checkBoxReverse.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanelButtons
             // 
@@ -172,71 +222,24 @@ namespace CSPUtils {
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.OnCancelClick);
             // 
-            // tableLayoutPanelOptions
-            // 
-            this.tableLayoutPanelOptions.AutoSize = true;
-            this.tableLayoutPanelOptions.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanelOptions.ColumnCount = 1;
-            this.tableLayoutPanelOptions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxCaseSensitive, 0, 0);
-            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxWholeWord, 0, 1);
-            this.tableLayoutPanelOptions.Controls.Add(this.checkBoxReverse, 0, 2);
-            this.tableLayoutPanelOptions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelOptions.Location = new System.Drawing.Point(3, 53);
-            this.tableLayoutPanelOptions.Name = "tableLayoutPanelOptions";
-            this.tableLayoutPanelOptions.RowCount = 3;
-            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelOptions.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelOptions.Size = new System.Drawing.Size(794, 138);
-            this.tableLayoutPanelOptions.TabIndex = 5;
-            // 
-            // checkBoxCaseSensitive
-            // 
-            this.checkBoxCaseSensitive.AutoSize = true;
-            this.checkBoxCaseSensitive.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxCaseSensitive.Name = "checkBoxCaseSensitive";
-            this.checkBoxCaseSensitive.Size = new System.Drawing.Size(243, 36);
-            this.checkBoxCaseSensitive.TabIndex = 3;
-            this.checkBoxCaseSensitive.Text = "Case Sensitive";
-            this.checkBoxCaseSensitive.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxWholeWord
-            // 
-            this.checkBoxWholeWord.AutoSize = true;
-            this.checkBoxWholeWord.Location = new System.Drawing.Point(3, 45);
-            this.checkBoxWholeWord.Name = "checkBoxWholeWord";
-            this.checkBoxWholeWord.Size = new System.Drawing.Size(208, 36);
-            this.checkBoxWholeWord.TabIndex = 4;
-            this.checkBoxWholeWord.Text = "Whole Word";
-            this.checkBoxWholeWord.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxReverse
-            // 
-            this.checkBoxReverse.AutoSize = true;
-            this.checkBoxReverse.Location = new System.Drawing.Point(3, 87);
-            this.checkBoxReverse.Name = "checkBoxReverse";
-            this.checkBoxReverse.Size = new System.Drawing.Size(158, 36);
-            this.checkBoxReverse.TabIndex = 5;
-            this.checkBoxReverse.Text = "Reverse";
-            this.checkBoxReverse.UseVisualStyleBackColor = true;
-            // 
             // FindDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 268);
             this.Controls.Add(this.tableLayoutPanelTop);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FindDialog";
             this.Text = "Find";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.tableLayoutPanelTop.ResumeLayout(false);
             this.tableLayoutPanelTop.PerformLayout();
             this.tableLayoutPanelSearch.ResumeLayout(false);
             this.tableLayoutPanelSearch.PerformLayout();
-            this.flowLayoutPanelButtons.ResumeLayout(false);
-            this.flowLayoutPanelButtons.PerformLayout();
             this.tableLayoutPanelOptions.ResumeLayout(false);
             this.tableLayoutPanelOptions.PerformLayout();
+            this.flowLayoutPanelButtons.ResumeLayout(false);
+            this.flowLayoutPanelButtons.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

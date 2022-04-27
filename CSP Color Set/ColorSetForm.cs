@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using About;
 
 namespace CSPUtils {
     public partial class ColorSetForm : Form {
@@ -11,18 +12,49 @@ namespace CSPUtils {
         private static ScrolledRichTextDialog verboseDlg;
         private static ScrolledRichTextDialog statusDlg;
 
+        private Font defaultFont;
+        private Font imageFont;
+        private Font courierFont;
+
+        // These dialogs are for debugging and will be added dynamically if true
+        private bool useVerbose = false;
+        private bool useStatus = false;
+        private ToolStripMenuItem showVerboseOutputToolStripMenuItem;
+        private ToolStripMenuItem showStatusOutputToolStripMenuItem;
+
         public ColorSetForm() {
             InitializeComponent();
 
+            defaultFont = textBoxInfo.Font;
+            imageFont = new System.Drawing.Font(defaultFont.Name, 10.0f);
+            courierFont = new Font("Courier New", 10.0f, FontStyle.Bold);
+
             ColorSetForm app = (ColorSetForm)FindForm().FindForm();
-            verboseDlg = new ScrolledRichTextDialog(
-                Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
-            verboseDlg.Text = "Verbose Output" + NL;
-            statusDlg = new ScrolledRichTextDialog(
-                Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
-            statusDlg.Text = "Status Output" + NL;
-            statusDlg.textBox.Font = new Font("Courier New", 10.0f, FontStyle.Bold);
-            appendLineStatusInfo($"{"FileName",-32} {"c1",3} {"c2",3} {"c3",3} {"c4",3} {"c5",3} {"c6",5} {"c7",3}");
+
+            if (useVerbose) {
+                showVerboseOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+                showVerboseOutputToolStripMenuItem.Name = "showVerboseOutputToolStripMenuItem";
+                showVerboseOutputToolStripMenuItem.Size = new System.Drawing.Size(497, 54);
+                showVerboseOutputToolStripMenuItem.Text = "Show Verbose Output...";
+                showVerboseOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowVerboseClick);
+                fileToolStripMenuItem.DropDownItems.Add(showVerboseOutputToolStripMenuItem);
+                verboseDlg = new ScrolledRichTextDialog(
+                    Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
+                verboseDlg.Text = "Verbose Output" + NL;
+            }
+            if (useStatus) {
+                showStatusOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+                showStatusOutputToolStripMenuItem.Name = "showStatusOutputToolStripMenuItem";
+                showStatusOutputToolStripMenuItem.Size = new System.Drawing.Size(497, 54);
+                showStatusOutputToolStripMenuItem.Text = "Show Status Output...";
+                showStatusOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowStatusClick);
+                fileToolStripMenuItem.DropDownItems.Add(showStatusOutputToolStripMenuItem);
+                statusDlg = new ScrolledRichTextDialog(
+                   Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
+                statusDlg.Text = "Status Output" + NL;
+                statusDlg.textBox.Font = courierFont;
+                appendLineStatusInfo($"{"FileName",-32} {"c1",3} {"c2",3} {"c3",3} {"c4",3} {"c5",3} {"c6",5} {"c7",3}");
+            }
         }
 
         /// <summary>
@@ -32,7 +64,6 @@ namespace CSPUtils {
         /// <param name="bytes"></param>
         private void processFile(string fileName, byte[] bytes) {
             //int nBytes = bytes.Length;
-            Font defaultFont = textBoxInfo.Font;
             string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
 
             //setInfoCursorToEnd();
@@ -113,15 +144,11 @@ namespace CSPUtils {
                             $"{red} {blue} {green} {alpha}");
                         c9 = reader.ReadInt32();
                         check = c9 != 0 && c9 != 1 ? "!!!" : "";
-#if true
                         appendLineVerboseInfo($"    c9={c9} {check}");
                         insertImage(red, green, blue, alpha, textBoxInfo, fileName);
                         // This is necessary to have the rest on the line after
                         // the image be correct
-                        textBoxInfo.SelectionFont = new Font(
-                             defaultFont.FontFamily,
-                             defaultFont.Size);
-#endif
+                        textBoxInfo.SelectionFont = defaultFont;
                         if (c9 != 0) {
                             // Process name
                             int nName = reader.ReadInt16();
@@ -172,6 +199,7 @@ namespace CSPUtils {
         }
         #endregion
 
+        #region Insert Image Methods
         /// <summary>
         /// Get the horizonal and vertcal DPI for a given control.
         /// </summary>
@@ -186,48 +214,29 @@ namespace CSPUtils {
 
         /// <summary>
         /// /// Inserts an image with a background corresponding to the given
-        /// red, green, blue values using the Clipboard.
+        /// red, green, blue values using Unicode characters.
         /// </summary>
         /// <param name="red"></param>
         /// <param name="green"></param>
         /// <param name="blue"></param>
         /// <param name="alpha"></param>
-        public void insertImage1(int red, int green, int blue, int alpha,
+        public void insertImage(int red, int green, int blue, int alpha,
             RichTextBox textBox, string fileName) {
-            // Specify the size in inches (in = points/72)
-            float sizeInches = .125f;
-            float[] dpi = getDpi(textBox);
-            int w = (int)(dpi[0] * sizeInches);
-            int h = (int)(dpi[1] * sizeInches);
-            Bitmap bm;
+            string symbol;
+            Color color = Color.FromArgb(alpha, red, green, blue);
             if (alpha == 0) {
-                bm = getTransparentBitmap(w, h);
+                //symbol = "\u25EA";  // Lower diagonal black
+                //symbol = "\u1F67F";  // Reverse chekerboard (Not in default char set)
+                symbol = "\u25A8";  // Right to left fill
             } else {
-                bm = new Bitmap(w, h);
-                using (Graphics g = Graphics.FromImage(bm)) {
-                    g.Clear(Color.FromArgb(alpha, red, green, blue));
-                }
+                symbol = "\u25A0";
             }
-
-            // Copy the bitmap to the clipboard
-            //Clipboard.SetData(DataFormats.Bitmap, bm);
-
-            //bool done = false;
-            //while (!done) {
-            //    try {
-            //        Clipboard.SetData(DataFormats.Bitmap, bm);
-            //        done = true;
-            //    } catch (Exception) {
-
-            //    }
-            //}
-
-            Clipboard.SetDataObject(bm, false, 10, 1000);
-            DataFormats.Format format = DataFormats.GetFormat(DataFormats.Bitmap);
-            if (textBox.CanPaste(format)) {
-                textBox.Paste(format);
-            }
-            if (bm != null) bm.Dispose();
+            textBox.SelectionStart = textBox.TextLength;
+            textBox.SelectionLength = 0;
+            textBox.SelectionColor = color;
+            textBox.SelectionFont = imageFont;
+            textBox.AppendText(symbol);
+            textBox.SelectionColor = textBox.ForeColor;
         }
 
         /// <summary>
@@ -239,7 +248,7 @@ namespace CSPUtils {
         /// <param name="green"></param>
         /// <param name="blue"></param>
         /// <param name="alpha"></param>
-        public void insertImage(int red, int green, int blue, int alpha,
+        public void insertImage1(int red, int green, int blue, int alpha,
             RichTextBox textBox, string fileName) {
             float sizeInches = .125f;
             float[] dpi = getDpi(textBox);
@@ -269,6 +278,52 @@ namespace CSPUtils {
             }
         }
 
+        /// <summary>
+        /// /// Inserts an image with a background corresponding to the given
+        /// red, green, blue values using the Clipboard.
+        /// </summary>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        /// <param name="alpha"></param>
+        public void insertImage2(int red, int green, int blue, int alpha,
+            RichTextBox textBox, string fileName) {
+            // Specify the size in inches (in = points/72)
+            float sizeInches = .125f;
+            float[] dpi = getDpi(textBox);
+            int w = (int)(dpi[0] * sizeInches);
+            int h = (int)(dpi[1] * sizeInches);
+            Bitmap bm;
+            if (alpha == 0) {
+                bm = getTransparentBitmap(w, h);
+            } else {
+                bm = new Bitmap(w, h);
+                using (Graphics g = Graphics.FromImage(bm)) {
+                    g.Clear(Color.FromArgb(alpha, red, green, blue));
+                }
+            }
+
+            // Copy the bitmap to the clipboard
+            //Clipboard.SetData(DataFormats.Bitmap, bm);
+
+            //bool done = false;
+            //while (!done) {
+            //    try {
+            //        Clipboard.SetData(DataFormats.Bitmap, bm);
+            //        done = true;
+            //    } catch (Exception) {
+
+            //    }
+            //}
+
+            Clipboard.SetDataObject(bm, false, 100, 100);
+            DataFormats.Format format = DataFormats.GetFormat(DataFormats.Bitmap);
+            if (textBox.CanPaste(format)) {
+                textBox.Paste(format);
+            }
+            if (bm != null) bm.Dispose();
+        }
+
         Bitmap getTransparentBitmap(int w, int h) {
             int squareSize = w / 4;
             int squareSize2 = 2 * squareSize;
@@ -286,6 +341,7 @@ namespace CSPUtils {
             }
             return bm;
         }
+        #endregion
 
         #region Append Methods
         private void appendStatusInfo(string info) {
@@ -324,6 +380,11 @@ namespace CSPUtils {
         #region OnClick Methods
         private void OnQuitClick(object sender, EventArgs e) {
             Close();
+        }
+
+        private void OnAboutClick(object sender, EventArgs e) {
+            AboutBox dlg = new AboutBox();
+            dlg.ShowDialog();
         }
 
         private void OnClearClick(object sender, EventArgs e) {
