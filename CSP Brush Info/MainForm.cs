@@ -667,6 +667,12 @@ namespace CSPBrushInfo {
         private void OnSelectAllClick(object sender, EventArgs e) {
             textBoxInfo.SelectAll();
         }
+
+        private void OnKeyDownPressed(object sender, KeyEventArgs e) {
+            if (e.Control && e.KeyCode == Keys.F) {
+                OnFindClick(sender, e);
+            }
+        }
     }
 
     public class NodeInfo {

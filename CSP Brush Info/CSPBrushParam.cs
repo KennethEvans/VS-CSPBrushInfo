@@ -634,7 +634,7 @@ namespace CSPBrushInfo {
                     }
                 }
             }
-            bm.Save(@"C:\Scratch\AAA\" + name + "TestDocument.png", ImageFormat.Png);
+            //bm.Save(@"C:\Scratch\AAA\" + name + "TestDocument.png", ImageFormat.Png);
             return bm;
         }
 
