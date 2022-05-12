@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -534,6 +535,14 @@ namespace CSPBrushInfo {
                 overviewDlg.Show();
             } else {
                 overviewDlg.Visible = true;
+            }
+        }
+
+        private void OnOverviewOnlineClick(object sender, EventArgs e) {
+            try {
+                Process.Start("https://kenevans.net/opensource/CSPBrushInfo/Help/Overview.html");
+            } catch (Exception ex) {
+                Utils.Utils.excMsg("Failed to start browser", ex);
             }
         }
 
