@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KEUtils.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -341,7 +342,7 @@ namespace CSPBrushInfo {
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Error creating effector images for " + name,
+                Utils.excMsg("Error creating effector images for " + name,
                     ex);
             }
             return imageArray;

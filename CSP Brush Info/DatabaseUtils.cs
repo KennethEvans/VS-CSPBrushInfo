@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KEUtils.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -94,7 +95,7 @@ namespace CSPBrushInfo {
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Error reading " + database, ex);
+                Utils.excMsg("Error reading " + database, ex);
                 sb.AppendLine("Error reading " + database);
                 return sb.ToString();
             }

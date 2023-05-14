@@ -1,16 +1,20 @@
-﻿using System;
+﻿using KEUtils.About;
+using KEUtils.ScrolledHTML2;
+using KEUtils.Utils;
+using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using About;
 
 namespace CSPUtils {
     public partial class ColorSetForm : Form {
         public static readonly String NL = Environment.NewLine;
         private static ScrolledRichTextDialog verboseDlg;
         private static ScrolledRichTextDialog statusDlg;
+        private static ScrolledHTMLDialog2 overviewDlg;
 
         private Font defaultFont;
         private Font imageFont;
@@ -39,7 +43,7 @@ namespace CSPUtils {
                 showVerboseOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowVerboseClick);
                 fileToolStripMenuItem.DropDownItems.Add(showVerboseOutputToolStripMenuItem);
                 verboseDlg = new ScrolledRichTextDialog(
-                    Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
+                    Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
                 verboseDlg.Text = "Verbose Output" + NL;
             }
             if (useStatus) {
@@ -50,7 +54,7 @@ namespace CSPUtils {
                 showStatusOutputToolStripMenuItem.Click += new System.EventHandler(this.OnShowStatusClick);
                 fileToolStripMenuItem.DropDownItems.Add(showStatusOutputToolStripMenuItem);
                 statusDlg = new ScrolledRichTextDialog(
-                   Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
+                   Utils.getDpiAdjustedSize(app, new Size(600, 400)), "");
                 statusDlg.Text = "Status Output" + NL;
                 statusDlg.textBox.Font = courierFont;
                 appendLineStatusInfo($"{"FileName",-32} {"c1",3} {"c2",3} {"c3",3} {"c4",3} {"c5",3} {"c6",5} {"c7",3}");
@@ -179,7 +183,7 @@ namespace CSPUtils {
                 string msg = $"Process error for {fileName}";
                 appendLineInfo(msg + NL + ex + NL);
                 appendLineVerboseInfo(msg + NL + ex + NL);
-                Utils.Utils.excMsg(msg, ex);
+                Utils.excMsg(msg, ex);
             }
         }
 
@@ -266,15 +270,15 @@ namespace CSPUtils {
             // RTfUtils uses this to set the size (in = points/72)
             bm.SetResolution(w / sizeInches, h / sizeInches);
             try {
-                String rtf = Utils.RTFUtils.imageRtf(textBox, bm);
+                String rtf = RTFUtils.imageRtf(textBox, bm);
                 if (!String.IsNullOrEmpty(rtf)) {
-                    Utils.RTFUtils.appendRtb(textBox, rtf);
+                    RTFUtils.appendRtb(textBox, rtf);
                 }
             } catch (Exception ex) {
                 string msg = $"Error processing image for {fileName}";
                 appendLineInfo(msg + NL + ex + NL);
                 appendLineVerboseInfo(msg + NL + ex + NL);
-                ////Utils.Utils.excMsg(msg, ex);
+                ////Utils.excMsg(msg, ex);
             }
         }
 
@@ -383,8 +387,32 @@ namespace CSPUtils {
         }
 
         private void OnAboutClick(object sender, EventArgs e) {
-            AboutBox dlg = new AboutBox();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Image image = null;
+            try {
+                image = Image.FromFile(@".\Help\CSPColorSet.256x256.png");
+            } catch (Exception ex) {
+                Utils.excMsg("Failed to get AboutBox image", ex);
+            }
+            AboutBox dlg = new AboutBox(image, assembly);
             dlg.ShowDialog();
+        }
+
+        private void OnOverviewClick(object sender, EventArgs e) {
+#if false
+            // Create, show, or set visible the overview dialog as appropriate
+            if (overviewDlg == null) {
+                ColorSetForm app = (ColorSetForm)FindForm().FindForm();
+                overviewDlg = new ScrolledHTMLDialog2(
+                    Utils.getDpiAdjustedSize(app, new Size(800, 600)),
+                    "Overview", @"Help\Overview.html");
+                overviewDlg.Show();
+            } else {
+                overviewDlg.Visible = true;
+            }
+#else
+            Utils.infoMsg("Not implemented yet");
+#endif
         }
 
         private void OnClearClick(object sender, EventArgs e) {
@@ -398,7 +426,7 @@ namespace CSPUtils {
             dlg.Multiselect = true;
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 if (dlg.FileNames == null) {
-                    Utils.Utils.warnMsg("Failed to open files to process");
+                    Utils.warnMsg("Failed to open files to process");
                     return;
                 }
                 Cursor.Current = Cursors.WaitCursor;
@@ -409,7 +437,7 @@ namespace CSPUtils {
                         processFile(fileName, bytes);
                     } catch (Exception ex) {
                         string msg = "Failed to open " + fileName;
-                        Utils.Utils.excMsg(msg, ex);
+                        Utils.excMsg(msg, ex);
                     }
                 }
                 Cursor.Current = Cursors.Default;
@@ -418,7 +446,7 @@ namespace CSPUtils {
 
         private void OnShowVerboseClick(object sender, EventArgs e) {
             if (verboseDlg == null) {
-                Utils.Utils.errMsg("textDlg is null");
+                Utils.errMsg("textDlg is null");
                 return;
             } else {
                 verboseDlg.Visible = true;
@@ -427,12 +455,12 @@ namespace CSPUtils {
 
         private void OnShowStatusClick(object sender, EventArgs e) {
             if (statusDlg == null) {
-                Utils.Utils.errMsg("statusDlg is null");
+                Utils.errMsg("statusDlg is null");
                 return;
             } else {
                 statusDlg.Visible = true;
             }
         }
-        #endregion
+#endregion
     }
 }

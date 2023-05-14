@@ -7,9 +7,12 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
-using About;
 using CSPUtils;
+using KEUtils.About;
+using KEUtils.ScrolledHTML2;
+using KEUtils.Utils;
 
 namespace CSPBrushInfo {
 
@@ -17,7 +20,7 @@ namespace CSPBrushInfo {
         enum FileType { Database1, Database2, Brush1, Brush2 };
         public static readonly int PROCESS_TIMEOUT = 5000; // ms
         public static readonly String NL = Environment.NewLine;
-        private static ScrolledHTMLDialog overviewDlg;
+        private static ScrolledHTMLDialog2 overviewDlg;
         private static ScrolledRichTextDialog textDlg;
         private static FindDialog findDlg;
 
@@ -71,7 +74,7 @@ namespace CSPBrushInfo {
                     radioButtonVariant = radioButtonVariant2;
                     break;
                 default:
-                    Utils.Utils.errMsg("Invalid fileType ("
+                    Utils.errMsg("Invalid fileType ("
                         + fileType + ") for processDatabase");
                     return;
             }
@@ -86,19 +89,19 @@ namespace CSPBrushInfo {
             name = textBoxDatabase.Text;
             if (name == null || name.Length == 0) {
                 registerOutput(fileType, info, paramsList);
-                Utils.Utils.errMsg("Database " + nDatabase + " is not defined");
+                Utils.errMsg("Database " + nDatabase + " is not defined");
                 return;
             }
             if (!File.Exists(name)) {
                 registerOutput(fileType, info, paramsList);
-                Utils.Utils.errMsg(name + " does not exist");
+                Utils.errMsg(name + " does not exist");
                 return;
             }
             // Get the selected brush name
             string brushName = textBoxBrush.Text;
             if (brushName == null | brushName.Length == 0) {
                 registerOutput(fileType, info, paramsList);
-                Utils.Utils.errMsg("Brush not specified");
+                Utils.errMsg("Brush not specified");
                 return;
             }
 
@@ -128,7 +131,7 @@ namespace CSPBrushInfo {
                     List<NodeInfo> items = new List<NodeInfo>();
                     using (dataReader = command.ExecuteReader()) {
                         if (!dataReader.HasRows) {
-                            Utils.Utils.errMsg("No matching rows looking for "
+                            Utils.errMsg("No matching rows looking for "
                                 + brushName);
                             registerOutput(fileType, info, paramsList);
                             return;
@@ -141,7 +144,7 @@ namespace CSPBrushInfo {
                         }
                     }
                     if (items.Count == 0) {
-                        Utils.Utils.errMsg("Did not find any matches for " + brushName);
+                        Utils.errMsg("Did not find any matches for " + brushName);
                         registerOutput(fileType, info, paramsList);
                         return;
                     }
@@ -172,7 +175,7 @@ namespace CSPBrushInfo {
                         if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                             List<string> selectedList = dlg.SelectedList;
                             if (selectedList == null || selectedList.Count == 0) {
-                                Utils.Utils.errMsg("No items selected");
+                                Utils.errMsg("No items selected");
                                 registerOutput(fileType, info, paramsList);
                                 return;
                             }
@@ -194,24 +197,24 @@ namespace CSPBrushInfo {
                     }
                     // These should not happen
                     if (nodeName == null) {
-                        Utils.Utils.errMsg("Failed to determine which brush");
+                        Utils.errMsg("Failed to determine which brush");
                         registerOutput(fileType, info, paramsList);
                     }
                     if (!nodeName.Equals(brushName)) {
-                        Utils.Utils.errMsg("Looking for " + brushName + ", found "
+                        Utils.errMsg("Looking for " + brushName + ", found "
                             + nodeName);
                         registerOutput(fileType, info, paramsList);
                         return;
                     }
                     if (nodeVariantId == 0) {
-                        Utils.Utils.errMsg(brushName
+                        Utils.errMsg(brushName
                             + " is not a brush (No NodeVariantId)");
                         registerOutput(fileType, info, paramsList);
                         return;
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Error finding " + brushName, ex);
+                Utils.excMsg("Error finding " + brushName, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
             }
@@ -231,7 +234,7 @@ namespace CSPBrushInfo {
                                             + variantId;
                     using (dataReader = command.ExecuteReader()) {
                         if (!dataReader.HasRows) {
-                            Utils.Utils.errMsg("No matching rows looking for VariantID = "
+                            Utils.errMsg("No matching rows looking for VariantID = "
                                 + variantId);
                             registerOutput(fileType, info, paramsList);
                             return;
@@ -256,7 +259,7 @@ namespace CSPBrushInfo {
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Error finding VariantID=" + nodeVariantId, ex);
+                Utils.excMsg("Error finding VariantID=" + nodeVariantId, ex);
                 registerOutput(fileType, info, paramsList);
                 return;
             }
@@ -272,13 +275,13 @@ namespace CSPBrushInfo {
             // Process 1
             processDatabase(FileType.Database1, false);
             if (params1.Count == 0) {
-                Utils.Utils.errMsg("Did not get params for Brush 1");
+                Utils.errMsg("Did not get params for Brush 1");
                 return;
             }
             // Process 2
             processDatabase(FileType.Database2, false);
             if (params2.Count == 0) {
-                Utils.Utils.errMsg("Did not get params for Brush 2");
+                Utils.errMsg("Did not get params for Brush 2");
                 return;
             }
 
@@ -438,15 +441,15 @@ namespace CSPBrushInfo {
                 appendInfo("    ");
                 String rtf;
                 foreach (Bitmap bm in images) {
-                    rtf = Utils.RTFUtils.imageRtf(textBoxInfo, bm);
+                    rtf = RTFUtils.imageRtf(textBoxInfo, bm);
                     if (!String.IsNullOrEmpty(rtf)) {
-                        Utils.RTFUtils.appendRtb(textBoxInfo, rtf);
+                        RTFUtils.appendRtb(textBoxInfo, rtf);
                         appendInfo("    ");
                     }
                 }
                 appendInfo(NL);
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Error processing effector images", ex);
+                Utils.excMsg("Error processing effector images", ex);
             }
         }
 
@@ -530,8 +533,9 @@ namespace CSPBrushInfo {
             // Create, show, or set visible the overview dialog as appropriate
             if (overviewDlg == null) {
                 MainForm app = (MainForm)FindForm().FindForm();
-                overviewDlg = new ScrolledHTMLDialog(
-                    Utils.Utils.getDpiAdjustedSize(app, new Size(800, 600)));
+                overviewDlg = new ScrolledHTMLDialog2(
+                    Utils.getDpiAdjustedSize(app, new Size(800, 600)),
+                    "Overview", @"Help\Overview.html");
                 overviewDlg.Show();
             } else {
                 overviewDlg.Visible = true;
@@ -542,12 +546,19 @@ namespace CSPBrushInfo {
             try {
                 Process.Start("https://kenevans.net/opensource/CSPBrushInfo/Help/Overview.html");
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Failed to start browser", ex);
+                Utils.excMsg("Failed to start browser", ex);
             }
         }
 
         private void OnAboutClick(object sender, EventArgs e) {
-            AboutBox dlg = new AboutBox();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Image image = null;
+            try {
+                image = Image.FromFile(@".\Help\CSPBrushInfo.256x256.png");
+            } catch (Exception ex) {
+                Utils.excMsg("Failed to get AboutBox image", ex);
+            }
+            AboutBox dlg = new AboutBox(image, assembly);
             dlg.ShowDialog();
         }
 
@@ -563,11 +574,11 @@ namespace CSPBrushInfo {
             string databaseName = textBoxDatabase1.Text;
             string brushName = textBoxBrush1.Text;
             if (databaseName == null || databaseName.Length == 0) {
-                Utils.Utils.errMsg("Database 1 is not defined");
+                Utils.errMsg("Database 1 is not defined");
                 return;
             }
             if (!File.Exists(databaseName)) {
-                Utils.Utils.errMsg("Database 1 does not exist");
+                Utils.errMsg("Database 1 does not exist");
                 return;
             }
             BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName,
@@ -578,7 +589,7 @@ namespace CSPBrushInfo {
                     textBoxBrush1.Text = dlg.SelectedBrush;
                     textBoxDatabase1.Text = dlg.Database;
                 } else {
-                    Utils.Utils.errMsg("No items selected");
+                    Utils.errMsg("No items selected");
                 }
             }
         }
@@ -587,11 +598,11 @@ namespace CSPBrushInfo {
             string databaseName = textBoxDatabase2.Text;
             string brushName = textBoxBrush2.Text;
             if (databaseName == null || databaseName.Length == 0) {
-                Utils.Utils.errMsg("Database 2 is not defined");
+                Utils.errMsg("Database 2 is not defined");
                 return;
             }
             if (!File.Exists(databaseName)) {
-                Utils.Utils.errMsg("Database 2 does not exist");
+                Utils.errMsg("Database 2 does not exist");
                 return;
             }
             BrushesInDatabaseDialog dlg = new BrushesInDatabaseDialog(databaseName,
@@ -602,7 +613,7 @@ namespace CSPBrushInfo {
                     textBoxBrush2.Text = dlg.SelectedBrush;
                     textBoxDatabase2.Text = dlg.Database;
                 } else {
-                    Utils.Utils.errMsg("No items selected");
+                    Utils.errMsg("No items selected");
                 }
             }
         }
@@ -619,7 +630,7 @@ namespace CSPBrushInfo {
                     textBoxInfo.SaveFile(dlg.FileName,
                         RichTextBoxStreamType.RichText);
                 } catch (Exception ex) {
-                    Utils.Utils.excMsg("Error saving RTF", ex);
+                    Utils.excMsg("Error saving RTF", ex);
                 }
             }
         }
@@ -651,7 +662,7 @@ namespace CSPBrushInfo {
             if (textDlg == null) {
                 MainForm app = (MainForm)FindForm().FindForm();
                 textDlg = new ScrolledRichTextDialog(
-                    Utils.Utils.getDpiAdjustedSize(app, new Size(600, 400)),
+                    Utils.getDpiAdjustedSize(app, new Size(600, 400)),
                     info);
                 textDlg.Text = "Tool Hierarchy";
                 textDlg.Show();

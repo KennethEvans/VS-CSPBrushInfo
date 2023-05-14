@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KEUtils.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -68,11 +69,11 @@ namespace CSPBrushInfo {
             listBoxBrushes.DataSource = null;
             string name = textBoxDatabase.Text;
             if (name == null || name.Length == 0) {
-                Utils.Utils.errMsg("Database is not defined");
+                Utils.errMsg("Database is not defined");
                 return;
             }
             if (!File.Exists(name)) {
-                Utils.Utils.errMsg(name + " does not exist");
+                Utils.errMsg(name + " does not exist");
                 return;
             }
             // Get the brushes from the database
@@ -93,7 +94,7 @@ namespace CSPBrushInfo {
                     string nodeName;
                     int nodeVariantId, nodeInitVariantId;
                     if (!dataReader.HasRows) {
-                        Utils.Utils.errMsg("No matching rows found");
+                        Utils.errMsg("No matching rows found");
                         return;
                     }
                     while (dataReader.Read()) {
@@ -120,7 +121,7 @@ namespace CSPBrushInfo {
                     }
                 }
             } catch (Exception ex) {
-                Utils.Utils.excMsg("Failed to get brushes", ex);
+                Utils.excMsg("Failed to get brushes", ex);
                 return;
             }
         }

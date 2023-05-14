@@ -1,3 +1,4 @@
+using KEUtils.Utils;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -48,7 +49,7 @@ namespace CSPUtils {
                     textBox.SaveFile(dlg.FileName,
                         RichTextBoxStreamType.RichText);
                 } catch (Exception ex) {
-                    Utils.Utils.excMsg("Error saving RTF", ex);
+                    Utils.excMsg("Error saving RTF", ex);
                 }
             }
         }

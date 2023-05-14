@@ -29,7 +29,9 @@ namespace CSPUtils {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.overviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,8 +39,6 @@ namespace CSPUtils {
             this.flowLayoutPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanelTop.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
@@ -69,6 +69,7 @@ namespace CSPUtils {
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -93,16 +94,26 @@ namespace CSPUtils {
             // openMenuItem
             // 
             this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.Size = new System.Drawing.Size(448, 54);
+            this.openMenuItem.Size = new System.Drawing.Size(258, 54);
             this.openMenuItem.Text = "Open";
             this.openMenuItem.Click += new System.EventHandler(this.OnOpenClick);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(255, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(258, 54);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.OnQuitClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(255, 6);
             // 
             // helpToolStripMenuItem
             // 
@@ -118,6 +129,7 @@ namespace CSPUtils {
             this.overviewToolStripMenuItem.Name = "overviewToolStripMenuItem";
             this.overviewToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
             this.overviewToolStripMenuItem.Text = "Overview...";
+            this.overviewToolStripMenuItem.Click += new System.EventHandler(this.OnOverviewClick);
             // 
             // aboutToolStripMenuItem
             // 
@@ -144,10 +156,10 @@ namespace CSPUtils {
             this.flowLayoutPanelButtons.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanelButtons.Controls.Add(this.button1);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonQuit);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(579, 798);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(580, 798);
             this.flowLayoutPanelButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
-            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(183, 46);
+            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(181, 46);
             this.flowLayoutPanelButtons.TabIndex = 0;
             this.flowLayoutPanelButtons.WrapContents = false;
             // 
@@ -159,7 +171,7 @@ namespace CSPUtils {
             this.button1.Location = new System.Drawing.Point(3, 2);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(93, 42);
+            this.button1.Size = new System.Drawing.Size(92, 42);
             this.button1.TabIndex = 4;
             this.button1.Text = "Clear";
             this.button1.UseVisualStyleBackColor = true;
@@ -170,24 +182,14 @@ namespace CSPUtils {
             this.buttonQuit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonQuit.AutoSize = true;
             this.buttonQuit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonQuit.Location = new System.Drawing.Point(102, 2);
+            this.buttonQuit.Location = new System.Drawing.Point(101, 2);
             this.buttonQuit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonQuit.Name = "buttonQuit";
-            this.buttonQuit.Size = new System.Drawing.Size(78, 42);
+            this.buttonQuit.Size = new System.Drawing.Size(77, 42);
             this.buttonQuit.TabIndex = 3;
             this.buttonQuit.Text = "Quit";
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitClick);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(445, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(445, 6);
             // 
             // ColorSetForm
             // 
